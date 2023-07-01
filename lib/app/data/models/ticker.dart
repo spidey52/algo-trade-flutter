@@ -8,17 +8,20 @@ class BinanceTicker {
   bool? loopEnabled;
   double? sellPercent;
   double? precision;
+  double? amount;
 
-  BinanceTicker(
-      {this.sId,
-      this.symbol,
-      this.createdAt,
-      this.updatedAt,
-      this.iV,
-      this.buyPercent,
-      this.loopEnabled,
-      this.sellPercent,
-      this.precision});
+  BinanceTicker({
+    this.sId,
+    this.symbol,
+    this.createdAt,
+    this.updatedAt,
+    this.iV,
+    this.buyPercent,
+    this.loopEnabled,
+    this.sellPercent,
+    this.amount,
+    this.precision,
+  });
 
   BinanceTicker.fromJson(Map<String, dynamic> json) {
     sId = json['_id'];
@@ -26,6 +29,7 @@ class BinanceTicker {
     createdAt = json['createdAt'];
     updatedAt = json['updatedAt'];
     iV = json['__v'];
+    amount = json['amount'] != null ? json['amount'].toDouble() : 0.0;
     buyPercent =
         json['buyPercent'] != null ? json['buyPercent'].toDouble() : 0.0;
     loopEnabled = json['loopEnabled'];
@@ -41,6 +45,7 @@ class BinanceTicker {
     data['createdAt'] = createdAt;
     data['updatedAt'] = updatedAt;
     data['__v'] = iV;
+    data['amount'] = amount;
     data['buyPercent'] = buyPercent;
     data['loopEnabled'] = loopEnabled;
     data['sellPercent'] = sellPercent;

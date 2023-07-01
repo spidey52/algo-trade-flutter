@@ -63,18 +63,34 @@ class GridOrderView extends GetView<GridOrderController> {
               ],
             ),
           ),
-          ElevatedButton(
-            onPressed: controller.isLoading.value
-                ? null
-                : () {
-                    controller.submitRequest();
-                  },
-            style: ButtonStyle(
-              minimumSize: MaterialStateProperty.all(
-                const Size(double.infinity, 44),
+          Obx(
+            () => ElevatedButton(
+              onPressed: controller.isLoading.value
+                  ? null
+                  : () {
+                      controller.submitRequest();
+                    },
+              style: ButtonStyle(
+                minimumSize: MaterialStateProperty.all(
+                  const Size(double.infinity, 44),
+                ),
               ),
+              child: controller.isLoading.value
+                  ? const SizedBox(
+                      height: 20,
+                      width: 20,
+                      child: CircularProgressIndicator(
+                        color: Colors.white,
+                      ),
+                    )
+                  : const Text(
+                      "Submit",
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
             ),
-            child: const Text("Submit"),
           )
         ],
       ),

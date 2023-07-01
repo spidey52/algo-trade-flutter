@@ -67,6 +67,20 @@ class GridOrderController extends GetxController {
     });
   }
 
+  void resetForm() {
+    symbolController.text = "";
+    priceController.text = "";
+    quantityController.text = "";
+    countController.text = "";
+    percentageController.text = "";
+
+    symbol.value = "";
+    price.value = "";
+    quantity.value = "";
+    count.value = "";
+    percentage.value = "";
+  }
+
   void submitRequest() async {
     submit();
 
@@ -98,8 +112,11 @@ class GridOrderController extends GetxController {
 
     isLoading.value = false;
 
+    print(response.statusCode == 200);
+
     if (response.statusCode == 200 || response.statusCode == 201) {
-      Fluttertoast.showToast(msg: response.body['order placed']);
+      Fluttertoast.showToast(msg: "order placed");
+      resetForm();
     } else {
       Fluttertoast.showToast(
           msg: response.body['message'] ?? "something went wrong");

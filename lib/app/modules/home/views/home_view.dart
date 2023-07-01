@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:pie_chart/pie_chart.dart';
 
 import '../controllers/home_controller.dart';
 
@@ -108,79 +109,138 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        const SizedBox(height: 10),
-        Row(
+    return RefreshIndicator(
+      onRefresh: () async {
+        await controller.fetchProfitBySymbol();
+        await controller.fetchTrades();
+        await controller.fetchProfit();
+      },
+      child: SingleChildScrollView(
+        physics: const ScrollPhysics(),
+        child: Column(
           children: [
-            Obx(
-              () => ProfitView(
-                title: "Today Profit",
-                amount: controller.todayProfit.value,
-              ),
+            const SizedBox(height: 10),
+            Row(
+              children: [
+                Obx(
+                  () => ProfitView(
+                    title: "Today Profit",
+                    amount: controller.todayProfit.value,
+                  ),
+                ),
+                Obx(
+                  () => ProfitView(
+                    title: "Total Profit",
+                    amount: controller.totalProfit.value,
+                  ),
+                ),
+              ],
             ),
-            Obx(
-              () => ProfitView(
-                title: "Total Profit",
-                amount: controller.totalProfit.value,
-              ),
-            )
-          ],
-        ),
-        const SizedBox(height: 20),
-        Obx(
-          () => GestureDetector(
-            onDoubleTap: () {
-              controller.reconnect();
-            },
-            child: Text(
-              'Pending Trades (${controller.trades.length})'.toUpperCase(),
-              style: const TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-          ),
-        ),
-        const SizedBox(height: 10),
-        Container(
-          padding: const EdgeInsets.symmetric(
-            horizontal: 8,
-            vertical: 4,
-          ),
-          height: 50,
-          child: TextField(
-            controller: controller.searchController,
-            decoration: const InputDecoration(
-              contentPadding: EdgeInsets.symmetric(
-                horizontal: 20,
-                vertical: 10,
-              ),
-              hintText: 'search',
-              border: OutlineInputBorder(),
-            ),
-          ),
-        ),
-        Obx(() => Expanded(
-              child: RefreshIndicator(
-                onRefresh: () async {
-                  return controller.fetchTrades();
-                },
-                child: ListView.builder(
-                  itemCount: controller.trades.length,
-                  physics: const BouncingScrollPhysics(),
-                  itemBuilder: (context, idx) {
-                    return TradeItem(
-                      trade: controller.trades[idx],
-                      ticker: controller
-                              .tickerStreamMap[controller.trades[idx].symbol] ??
-                          BinanceStream(),
-                    );
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                IconButton(
+                  onPressed: () {
+                    controller.fetchProfitBySymbol();
                   },
+                  icon: const Icon(Icons.refresh),
+                ),
+              ],
+            ),
+            ProfityBySymbol(controller: controller),
+            const SizedBox(height: 20),
+            Obx(
+              () => GestureDetector(
+                onDoubleTap: () {
+                  controller.reconnect();
+                },
+                child: Text(
+                  'Pending Trades (${controller.trades.length})'.toUpperCase(),
+                  style: const TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
               ),
-            )),
-      ],
+            ),
+            const SizedBox(height: 10),
+            Container(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 8,
+                vertical: 4,
+              ),
+              height: 50,
+              child: TextField(
+                controller: controller.searchController,
+                decoration: const InputDecoration(
+                  contentPadding: EdgeInsets.symmetric(
+                    horizontal: 20,
+                    vertical: 10,
+                  ),
+                  hintText: 'search',
+                  border: OutlineInputBorder(),
+                ),
+              ),
+            ),
+            Obx(() => SizedBox(
+                  height: Get.height - 260,
+                  child: RefreshIndicator(
+                    onRefresh: () async {
+                      return controller.fetchTrades();
+                    },
+                    child: ListView.builder(
+                      itemCount: controller.trades.length,
+                      physics: const BouncingScrollPhysics(),
+                      itemBuilder: (context, idx) {
+                        return TradeItem(
+                          trade: controller.trades[idx],
+                          ticker: controller.tickerStreamMap[
+                                  controller.trades[idx].symbol] ??
+                              BinanceStream(),
+                        );
+                      },
+                    ),
+                  ),
+                )),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class ProfityBySymbol extends StatelessWidget {
+  const ProfityBySymbol({
+    super.key,
+    required this.controller,
+  });
+
+  final HomeController controller;
+
+  get chart {
+    return PieChart(
+      dataMap: controller.mappedPieData,
+      chartValuesOptions: const ChartValuesOptions(
+        decimalPlaces: 1,
+      ),
+      legendOptions: const LegendOptions(
+        legendPosition: LegendPosition.right,
+        showLegends: true,
+        legendTextStyle: TextStyle(
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Obx(
+      () => controller.pieLoading.value
+          ? const CircularProgressIndicator()
+          : controller.mappedPieData.isEmpty
+              ? const Text("No Data")
+              : chart,
     );
   }
 }

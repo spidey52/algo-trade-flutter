@@ -3,15 +3,15 @@ import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
 
-import '../controllers/ticker_edit_controller.dart';
+import '../controllers/add_ticker_controller.dart';
 
-class TickerEditView extends GetView<TickerEditController> {
-  const TickerEditView({Key? key}) : super(key: key);
+class AddTickerView extends GetView<AddTickerController> {
+  const AddTickerView({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Edit Ticker'),
+        title: const Text('AddTickerView'),
         centerTitle: true,
       ),
       body: Obx(

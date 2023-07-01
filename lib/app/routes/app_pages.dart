@@ -1,5 +1,7 @@
 import 'package:get/get.dart';
 
+import '../modules/add_ticker/bindings/add_ticker_binding.dart';
+import '../modules/add_ticker/views/add_ticker_view.dart';
 import '../modules/completed/bindings/completed_binding.dart';
 import '../modules/completed/views/completed_view.dart';
 import '../modules/grid-order/bindings/grid_order_binding.dart';
@@ -64,6 +66,11 @@ class AppPages {
       name: _Paths.TICKER_EDIT,
       page: () => const TickerEditView(),
       binding: TickerEditBinding(),
+    ),
+    GetPage(
+      name: _Paths.ADD_TICKER,
+      page: () => const AddTickerView(),
+      binding: AddTickerBinding(),
     ),
   ];
 }

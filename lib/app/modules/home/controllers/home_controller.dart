@@ -18,7 +18,7 @@ final wsUrl = Uri.parse('wss://stream.binance.com:9443/ws/!miniTicker@arr');
 class HomeController extends GetxController {
   final box = GetStorage();
 
-  final count = 3.obs;
+  final count = 0.obs;
   final isLoading = false.obs;
   final market = 'FUTURE'.obs;
 
@@ -26,6 +26,10 @@ class HomeController extends GetxController {
   final profitLoading = false.obs;
   final todayProfit = '0'.obs;
   final totalProfit = '0'.obs;
+
+  // pie chart view
+  final pieLoading = false.obs;
+  final pieData = <ProfitReportBySymbol>[].obs;
 
   final trades = <Trade>[].obs;
 
@@ -102,6 +106,7 @@ class HomeController extends GetxController {
 
     ever(market, (_) {
       fetchProfit();
+      fetchProfitBySymbol();
       fetchTrades();
     });
 
@@ -112,6 +117,7 @@ class HomeController extends GetxController {
     // }
 
     tradesProvider = TradesProvider();
+    fetchProfitBySymbol();
 
     channel = WebSocketChannel.connect(wsUrl);
 
@@ -147,7 +153,7 @@ class HomeController extends GetxController {
     Get.offNamed(Routes.LOGIN);
   }
 
-  void fetchTrades() async {
+  Future<void> fetchTrades() async {
     Response response = await tradesProvider.get(kTradeList, query: {
       "market": market.value,
       "symbol": search.value,
@@ -186,7 +192,7 @@ class HomeController extends GetxController {
     }
   }
 
-  void fetchProfit() async {
+  Future<void> fetchProfit() async {
     try {
       profitLoading.value = true;
       Response response = await tradesProvider.getCall(kProfit, market.value);
@@ -202,6 +208,38 @@ class HomeController extends GetxController {
     } finally {
       profitLoading.value = false;
     }
+  }
+
+  fetchProfitBySymbol() async {
+    try {
+      pieLoading.value = true;
+      Response response =
+          await tradesProvider.get("$kReportProfit/future/symbol");
+      if (response.statusCode != 200) {
+        return;
+      }
+
+      pieData.value = (response.body as List)
+          .map((e) => ProfitReportBySymbol.fromJson(e))
+          .toList();
+
+      pieData.sort((a, b) => b.profit!.compareTo(a.profit!));
+    } catch (e) {
+      Fluttertoast.showToast(msg: e.toString());
+    } finally {
+      pieLoading.value = false;
+    }
+  }
+
+  get mappedPieData {
+    // String double map
+
+    Map<String, double> data = {};
+
+    for (var element in pieData) {
+      data[element.symbol ?? ""] = element.profit ?? 0;
+    }
+    return data;
   }
 
   @override
@@ -223,4 +261,23 @@ class HomeController extends GetxController {
   }
 
   void increment() => count.value++;
+}
+
+class ProfitReportBySymbol {
+  String? symbol;
+  double? profit;
+
+  ProfitReportBySymbol({this.symbol, this.profit});
+
+  ProfitReportBySymbol.fromJson(Map<String, dynamic> json) {
+    symbol = json['_id'];
+    profit = json['profit'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['symbol'] = symbol;
+    data['profit'] = profit;
+    return data;
+  }
 }

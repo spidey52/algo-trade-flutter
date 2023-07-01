@@ -11,6 +11,7 @@ abstract class Routes {
   static const MORE = _Paths.MORE;
   static const TICKERS = _Paths.TICKERS;
   static const TICKER_EDIT = _Paths.TICKER_EDIT;
+  static const ADD_TICKER = _Paths.ADD_TICKER;
 }
 
 abstract class _Paths {
@@ -23,4 +24,5 @@ abstract class _Paths {
   static const MORE = '/more';
   static const TICKERS = '/tickers';
   static const TICKER_EDIT = '/ticker-edit';
+  static const ADD_TICKER = '/add-ticker';
 }
