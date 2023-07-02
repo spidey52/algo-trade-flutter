@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 const kTokenKey = 'token';
+String firebaseToken = '';
 
 const kProfitColor = Colors.greenAccent;
 const kLossColor = Colors.redAccent;
@@ -13,6 +14,7 @@ const kLoginUrl = "$kBaseUrl/admin/users/login/request";
 const kLoginVerifyUrl = "$kBaseUrl/admin/users/login/verify";
 const kTokenVerifyUrl = "$kBaseUrl/admin/users/token/verify";
 
+const kFcmTokenUrl = "$kApiUrl/fcm";
 const kTradeList = '$kApiUrl/trades';
 const kOrders = '$kApiUrl/orders';
 const kGridOrder = '$kOrders/grid';

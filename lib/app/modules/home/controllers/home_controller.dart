@@ -100,9 +100,21 @@ class HomeController extends GetxController {
     }
   }
 
+  Future<void> uploadFcmToken() async {
+    try {
+      await tradesProvider.post(kFcmTokenUrl, {
+        "token": firebaseToken,
+      });
+      Fluttertoast.showToast(msg: "token uploaded");
+    } catch (e) {
+      Fluttertoast.showToast(msg: e.toString());
+    }
+  }
+
   @override
   void onInit() {
     super.onInit();
+
 
     ever(market, (_) {
       fetchProfit();
@@ -117,6 +129,7 @@ class HomeController extends GetxController {
     // }
 
     tradesProvider = TradesProvider();
+    uploadFcmToken();
     fetchProfitBySymbol();
 
     channel = WebSocketChannel.connect(wsUrl);
