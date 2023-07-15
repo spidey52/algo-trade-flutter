@@ -7,16 +7,19 @@ import 'package:algo_trade/app/data/models/trade.dart';
 import 'package:algo_trade/app/network/trade_provider.dart';
 import 'package:algo_trade/app/routes/app_pages.dart';
 import 'package:algo_trade/utils/constants.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:restart_app/restart_app.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
 final wsUrl = Uri.parse('wss://stream.binance.com:9443/ws/!miniTicker@arr');
 
 class HomeController extends GetxController {
   final box = GetStorage();
+  final url = kApiUrl.obs;
 
   final count = 0.obs;
   final isLoading = false.obs;
@@ -42,6 +45,17 @@ class HomeController extends GetxController {
 
   late WebSocketChannel channel;
   late TradesProvider tradesProvider;
+
+  void toggleUrl() {
+    if (url.value == "http://52.66.39.113:9001") {
+      kApiUrl = "https://binance-spot-trade.spideyworld.co.in";
+      url.value = kApiUrl;
+    } else {
+      kApiUrl = "http://52.66.39.113:9001";
+      url.value = kApiUrl;
+    }
+    box.write('api_url', kApiUrl);
+  }
 
   void useStreamData(result) {
     for (var element in result) {
@@ -114,7 +128,6 @@ class HomeController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-
 
     ever(market, (_) {
       fetchProfit();

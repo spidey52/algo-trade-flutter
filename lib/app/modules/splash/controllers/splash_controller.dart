@@ -14,10 +14,19 @@ class SplashController extends GetxController {
 
   @override
   void onReady() {
-
+    readUrl();
     Future.delayed(const Duration(seconds: 1), () {
       Get.offNamed(Routes.HOME);
     });
+  }
+
+  void readUrl() {
+    final url = box.read('api_url');
+    if (url == null) {
+      box.write('api_url', kApiUrl);
+    } else {
+      kApiUrl = url;
+    }
   }
 
   verifyToken() async {

@@ -136,8 +136,8 @@ class TickerItem extends StatelessWidget {
               valueStyle: sellValueStyle,
             ),
             KeyValue(
-              title: "Loop Enabled",
-              value: "${ticker.loopEnabled}",
+              title: "OOMP Enabled",
+              value: "${ticker.oomp}",
               titleStyle: titleStyle,
               valueStyle: valueStyle,
             ),

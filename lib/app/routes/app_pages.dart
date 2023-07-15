@@ -12,6 +12,10 @@ import '../modules/login/bindings/login_binding.dart';
 import '../modules/login/views/login_view.dart';
 import '../modules/more/bindings/more_binding.dart';
 import '../modules/more/views/more_view.dart';
+import '../modules/orders/bindings/orders_binding.dart';
+import '../modules/orders/views/orders_view.dart';
+import '../modules/report-page/bindings/report_page_binding.dart';
+import '../modules/report-page/views/report_page_view.dart';
 import '../modules/splash/bindings/splash_binding.dart';
 import '../modules/splash/views/splash_view.dart';
 import '../modules/ticker-edit/bindings/ticker_edit_binding.dart';
@@ -71,6 +75,16 @@ class AppPages {
       name: _Paths.ADD_TICKER,
       page: () => const AddTickerView(),
       binding: AddTickerBinding(),
+    ),
+    GetPage(
+      name: _Paths.REPORT_PAGE,
+      page: () => const ReportPageView(),
+      binding: ReportPageBinding(),
+    ),
+    GetPage(
+      name: _Paths.ORDERS,
+      page: () => const OrdersView(),
+      binding: OrdersBinding(),
     ),
   ];
 }

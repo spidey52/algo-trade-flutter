@@ -6,6 +6,7 @@ class BinanceTicker {
   int? iV;
   double? buyPercent;
   bool? loopEnabled;
+  bool? oomp;
   double? sellPercent;
   double? precision;
   double? amount;
@@ -21,6 +22,7 @@ class BinanceTicker {
     this.sellPercent,
     this.amount,
     this.precision,
+    this.oomp,
   });
 
   BinanceTicker.fromJson(Map<String, dynamic> json) {
@@ -36,6 +38,7 @@ class BinanceTicker {
     sellPercent =
         json['sellPercent'] != null ? json['sellPercent'].toDouble() : 0.0;
     precision = json['precision'] != null ? json['precision'].toDouble() : 0.0;
+    oomp = json['oomp'];
   }
 
   Map<String, dynamic> toJson() {
@@ -50,6 +53,7 @@ class BinanceTicker {
     data['loopEnabled'] = loopEnabled;
     data['sellPercent'] = sellPercent;
     data['precision'] = precision;
+    data['oomp'] = oomp;
     return data;
   }
 }

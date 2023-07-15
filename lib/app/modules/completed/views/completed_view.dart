@@ -106,11 +106,17 @@ class CompletedTradeItem extends StatelessWidget {
             KeyValue(
               title: trade.symbol ?? "",
               value: DateFormat("dd MM yyyy HH:mm:ss").format(sellTime),
+              titleStyle: const TextStyle(
+                color: Colors.green,
+                fontSize: 18,
+                fontWeight: FontWeight.w800,
+              ),
               valueStyle: const TextStyle(
-                // color: profit > 0 ? Colors.green : Colors.red,
                 fontWeight: FontWeight.w800,
               ),
             ),
+            KeyValue(title: "QUANTITY", value: "${trade.quantity}"),
+            KeyValue(title: "BUYPRICE", value: "${trade.buyPrice}"),
             KeyValue(
                 title: "SELLPRICE", value: trade.sellPrice?.toString() ?? ""),
             KeyValue(
@@ -126,7 +132,7 @@ class CompletedTradeItem extends StatelessWidget {
               value: "${profitPercent.toStringAsFixed(2)}%",
               valueStyle: TextStyle(
                 color: profit > 0 ? Colors.green : Colors.red,
-                  fontSize: 16,
+                fontSize: 16,
                 fontWeight: FontWeight.w800,
               ),
             ),

@@ -1,4 +1,5 @@
 import 'package:algo_trade/app/modules/home/controllers/home_controller.dart';
+import 'package:algo_trade/app/routes/app_pages.dart';
 import 'package:algo_trade/utils/constants.dart';
 import 'package:flutter/material.dart';
 
@@ -14,13 +15,13 @@ class ProfitView extends StatelessWidget {
   final String title;
   final String amount;
 
-
   @override
   Widget build(BuildContext context) {
     return Expanded(
       child: GestureDetector(
         onTap: () {
-          controller.fetchProfit();
+          // controller.fetchProfit();
+          Get.toNamed(Routes.REPORT_PAGE);
         },
         child: Card(
           child: Container(

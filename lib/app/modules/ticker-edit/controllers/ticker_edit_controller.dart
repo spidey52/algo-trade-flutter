@@ -39,20 +39,13 @@ class TickerEditController extends GetxController {
       );
 
       if (response.statusCode == 200) {
+        showToast("Ticker updated");
         Get.back();
       } else {
-        Get.snackbar(
-          "Error",
-          response.body.toString(),
-          snackPosition: SnackPosition.BOTTOM,
-        );
+        showToast(response.body['message']);
       }
     } catch (e) {
-      Get.snackbar(
-        "Error",
-        e.toString(),
-        snackPosition: SnackPosition.BOTTOM,
-      );
+      showToast(e.toString());
     }
 
     isLoading.value = false;

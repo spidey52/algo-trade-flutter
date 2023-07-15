@@ -85,6 +85,16 @@ class HomeView extends GetView<HomeController> {
               Get.isDarkMode ? Icons.dark_mode : Icons.light_mode,
             ),
           ),
+          Obx(
+            () => IconButton(
+              onPressed: () {
+                controller.toggleUrl();
+              },
+              icon: controller.url.value == "http://52.66.39.113:9001"
+                  ? const Icon(Icons.cloud_off)
+                  : const Icon(Icons.cloud),
+            ),
+          ),
         ],
       ),
       body: Obx(
@@ -114,6 +124,7 @@ class HomePage extends StatelessWidget {
         await controller.fetchProfitBySymbol();
         await controller.fetchTrades();
         await controller.fetchProfit();
+        controller.reconnect();
       },
       child: SingleChildScrollView(
         physics: const ScrollPhysics(),

@@ -18,6 +18,14 @@ class MoreView extends GetView<MoreController> {
         title: 'ADD TICKER',
         route: Routes.ADD_TICKER,
       ),
+      const MoreListItem(
+        title: 'REPORT PAGE',
+        route: Routes.REPORT_PAGE,
+      ),
+      const MoreListItem(
+        title: 'ORDERS PAGE',
+        route: Routes.ORDERS,
+      ),
     ];
   }
 
@@ -34,6 +42,7 @@ class MoreView extends GetView<MoreController> {
           mainAxisExtent: 60,
           crossAxisCount: 2,
           crossAxisSpacing: 10,
+          mainAxisSpacing: 10,
         ),
         itemBuilder: (context, index) {
           return ElevatedButton(
@@ -46,7 +55,7 @@ class MoreView extends GetView<MoreController> {
             ),
           );
         },
-        itemCount: 2,
+        itemCount: items.length,
       ),
     );
   }

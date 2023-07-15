@@ -1,5 +1,8 @@
 import 'package:algo_trade/app/data/models/binance_stream.dart';
 import 'package:algo_trade/app/data/models/trade.dart';
+import 'package:algo_trade/app/modules/completed/views/completed_view.dart';
+import 'package:algo_trade/app/modules/home/controllers/home_controller.dart';
+import 'package:algo_trade/app/routes/app_pages.dart';
 import 'package:algo_trade/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -10,6 +13,8 @@ class TradeItem extends StatelessWidget {
     required this.trade,
     required this.ticker,
   });
+
+  HomeController get controller => Get.find<HomeController>();
 
   final Trade trade;
   final BinanceStream ticker;
@@ -38,18 +43,71 @@ class TradeItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
-        Get.bottomSheet(
+      onTap: () async {
+        await Get.bottomSheet(
           Container(
-            height: Get.height,
-            decoration: const BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.vertical(top: Radius.circular(10)),
+            height: Get.height * 0.4,
+            decoration: BoxDecoration(
+              color: Get.theme.colorScheme.background,
+              borderRadius:
+                  const BorderRadius.vertical(top: Radius.circular(10)),
             ),
-            child: const Column(
-              mainAxisAlignment: MainAxisAlignment.center,
+            child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
-              children: [Text("hello world"), Text("details of the trade")],
+              children: [
+                const Padding(
+                  padding: EdgeInsets.symmetric(
+                    vertical: 10,
+                    horizontal: 10,
+                  ),
+                  child: Text(
+                    "Trade Details",
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18,
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Wrap(
+                    runSpacing: 10,
+                    children: [
+                      KeyValue(title: "symbol", value: "${trade.symbol}"),
+                      KeyValue(title: "quantity", value: "${trade.quantity}"),
+                      KeyValue(title: "buyPrice", value: "${trade.buyPrice}"),
+                      KeyValue(title: "BuyTime", value: "${trade.buyTime}"),
+                    ],
+                  ),
+                ),
+                const Divider(),
+                Row(
+                  children: [
+                    const SizedBox(
+                      width: 6,
+                    ),
+                    OutlinedButton(
+                      onPressed: () {
+                        Get.back();
+                        controller.count.value = 1;
+                      },
+                      child: const Text("COMPLETED TRADES"),
+                    ),
+                    const SizedBox(
+                      width: 10,
+                    ),
+                    OutlinedButton(
+                      onPressed: () {
+                        Get.toNamed(
+                          Routes.ORDERS,
+                          arguments: trade.symbol,
+                        );
+                      },
+                      child: const Text("OPEN ORDERS"),
+                    ),
+                  ],
+                )
+              ],
             ),
           ),
         );
