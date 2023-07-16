@@ -35,6 +35,7 @@ class TickerEditController extends GetxController {
           "sellPercent": sellPercentController.text,
           "amount": amountController.text,
           "loopEnabled": loopEnabled.value,
+          "oomp": loopEnabled.value,
         },
       );
 

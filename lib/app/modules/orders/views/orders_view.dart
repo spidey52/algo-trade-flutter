@@ -85,26 +85,65 @@ class OrdersView extends GetView<OrdersController> {
                         await Get.dialog(
                           AlertDialog(
                             title: const Text("Cancel All Orders"),
-                            content: Text(
-                                "Are you sure you want to cancel all orders for $symbol?"),
+                            content: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text(
+                                    "Are you sure you want to cancel all orders for $symbol?"),
+                                Obx(
+                                  () => controller.isBuy.value == true
+                                      ? const SizedBox()
+                                      : Row(
+                                          children: [
+                                            const Text("create new orders?"),
+                                            const SizedBox(width: 10),
+                                            Switch(
+                                              value: controller
+                                                  .isCreateNewOrders.value,
+                                              onChanged: (val) {
+                                                controller.isCreateNewOrders
+                                                    .value = val;
+                                              },
+                                            ),
+                                          ],
+                                        ),
+                                )
+                              ],
+                            ),
                             actions: [
                               TextButton(
                                 onPressed: () {
                                   Get.back();
                                 },
-                                child: const Text("Cancel"),
+                                child: const Text("cancel"),
                               ),
-                              TextButton(
-                                onPressed: () async {
-                                  final orderIds = controller.getOrders
-                                      .where((e) => e.amount != null)
-                                      .map((e) => e.orderId ?? "")
-                                      .toList();
-                                  await controller.cancelOrder(
-                                      orderIds, symbol);
-                                  Get.back();
-                                },
-                                child: const Text("Cancel All"),
+                              Obx(
+                                () => TextButton(
+                                  onPressed: controller.isCancelLoading.value
+                                      ? null
+                                      : () async {
+                                          final orderIds = controller.getOrders
+                                              .where((e) => e.amount != null)
+                                              .map((e) => e.orderId ?? "")
+                                              .toList();
+                                          await controller.cancelOrder(
+                                              orderIds, symbol);
+
+                                          if (controller.isBuy.value == false &&
+                                              controller.isCreateNewOrders
+                                                      .value ==
+                                                  true) {
+                                            await controller
+                                                .replaceAllSellOrders(symbol);
+                                            // Get.to(() => const CompletedView());
+                                          }
+
+                                          Get.back();
+                                        },
+                                  child: Text(controller.isCancelLoading.value
+                                      ? "Cancelling..."
+                                      : "Confirm"),
+                                ),
                               )
                             ],
                           ),

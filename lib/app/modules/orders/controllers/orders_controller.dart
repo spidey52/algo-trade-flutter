@@ -16,6 +16,7 @@ class OrdersController extends GetxController {
 
   RxBool isLoading = false.obs;
   RxBool isCancelLoading = false.obs;
+  RxBool isCreateNewOrders = false.obs;
 
   RxString search = "".obs;
 
@@ -68,6 +69,26 @@ class OrdersController extends GetxController {
       }
 
       showToast("Order cancelled successfully");
+      await fetchOrders();
+    } catch (e) {
+      showToast(e.toString());
+    } finally {
+      isCancelLoading.value = false;
+    }
+  }
+
+  Future<void> replaceAllSellOrders(String symbol) async {
+    try {
+      isCancelLoading.value = true;
+
+      final response = await apiService.replaceAllSellOrders(symbol);
+
+      if (response.statusCode != 200) {
+        showToast(response.body["message"]);
+        return;
+      }
+
+      showToast("Orders created successfully");
       await fetchOrders();
     } catch (e) {
       showToast(e.toString());

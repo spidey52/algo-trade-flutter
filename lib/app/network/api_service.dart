@@ -4,23 +4,23 @@ import 'package:get_storage/get_storage.dart';
 class ApiService extends GetConnect {
   final box = GetStorage();
 
-  @override
-  void onInit() {
-    box.listen(() {});
-    super.onInit();
-  }
+  get url => box.read("api_url");
 
   Future<Response> fetchFutureOrders(String symbol) async {
-    final url = box.read("api_url");
     return await get("$url/orders/future", query: {
       "symbol": symbol,
     });
   }
 
   Future<Response> cancelOrder(List<String> orderId, String symbol) async {
-    final url = box.read("api_url");
     return await post("$url/orders/future/cancel", {
       "ids": orderId,
+      "symbol": symbol,
+    });
+  }
+
+  Future<Response> replaceAllSellOrders(String symbol) async {
+    return await post("$url/orders/future/replace-all", {
       "symbol": symbol,
     });
   }
