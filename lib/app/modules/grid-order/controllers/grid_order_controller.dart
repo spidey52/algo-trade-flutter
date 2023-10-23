@@ -25,6 +25,7 @@ class GridOrderController extends GetxController {
   final quantity = "".obs;
   final count = "".obs;
   final percentage = "".obs;
+  final skipOne = false.obs;
 
   final autoSuggestions = <GridOrderSuggestion>[].obs;
 
@@ -98,6 +99,7 @@ class GridOrderController extends GetxController {
     final body = {
       "symbol": symbol.value,
       "initialPrice": price.value,
+      "skipOne": skipOne.value,
       "amount": quantity.value,
       "side": side.value,
       "count": count.value,
@@ -111,8 +113,6 @@ class GridOrderController extends GetxController {
     );
 
     isLoading.value = false;
-
-    print(response.statusCode == 200);
 
     if (response.statusCode == 200 || response.statusCode == 201) {
       Fluttertoast.showToast(msg: "order placed");

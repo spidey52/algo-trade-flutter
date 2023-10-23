@@ -25,7 +25,7 @@ class ReportPageView extends GetView<ReportPageController> {
             ),
             child: Obx(
               () => Text(
-                'Profit Reports ( ${controller.reportResponse.length} )',
+                'Profit Reports ( ${controller.daysCount.value} )',
                 style: const TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,

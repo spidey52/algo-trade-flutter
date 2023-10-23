@@ -4,6 +4,9 @@ import 'package:algo_trade/app/modules/grid-order/views/grid_order_view.dart';
 import 'package:algo_trade/app/modules/home/views/profit_view.dart';
 import 'package:algo_trade/app/modules/home/views/trade_item_view.dart';
 import 'package:algo_trade/app/modules/more/views/more_view.dart';
+import 'package:algo_trade/app/routes/app_pages.dart';
+import 'package:algo_trade/utils/box.storage.dart';
+import 'package:algo_trade/utils/constants.dart';
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
@@ -65,8 +68,46 @@ class HomeView extends GetView<HomeController> {
         title: const Text('Algo Trade'),
         actions: [
           IconButton(
-            onPressed: () {
-              controller.toggleMarket();
+            onPressed: () async {
+              showDialog(
+                  context: context,
+                  builder: (ctx) {
+                    return AlertDialog(
+                      title: const Text("Select Market"),
+                      content: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          ...users.keys.map((e) {
+                            return ListTile(
+                              onTap: () {
+                                // controller.market.value = e;
+                                box.write(kLoggedInUser, e);
+                                Get.offAllNamed(Routes.SPLASH);
+                              },
+                              title: Text(e),
+                            );
+                          }).toList(),
+
+                          // ListTile(
+                          //   onTap: () {
+                          //     controller.market.value = "FUTURE";
+                          //     box.write('market', "FUTURE");
+                          //     Get.back();
+                          //   },
+                          //   title: const Text("FUTURE"),
+                          // ),
+                          // ListTile(
+                          //   onTap: () {
+                          //     controller.market.value = "SPOT";
+                          //     box.write('market', "SPOT");
+                          //     Get.back();
+                          //   },
+                          //   title: const Text("SPOT"),
+                          // ),
+                        ],
+                      ),
+                    );
+                  });
             },
             icon: Obx(
               () => Icon(controller.market.value == 'FUTURE'
@@ -85,16 +126,16 @@ class HomeView extends GetView<HomeController> {
               Get.isDarkMode ? Icons.dark_mode : Icons.light_mode,
             ),
           ),
-          Obx(
-            () => IconButton(
-              onPressed: () {
-                controller.toggleUrl();
-              },
-              icon: controller.url.value == "http://52.66.39.113:9001"
-                  ? const Icon(Icons.cloud_off)
-                  : const Icon(Icons.cloud),
-            ),
-          ),
+          // Obx(
+          //   () => IconButton(
+          //     onPressed: () {
+          //       controller.toggleUrl();
+          //     },
+          //     icon: controller.url.value == "http://52.66.39.113:9001"
+          //         ? const Icon(Icons.cloud_off)
+          //         : const Icon(Icons.cloud),
+          //   ),
+          // ),
         ],
       ),
       body: Obx(
@@ -165,12 +206,19 @@ class HomePage extends StatelessWidget {
                 onDoubleTap: () {
                   controller.reconnect();
                 },
-                child: Text(
-                  'Pending Trades (${controller.trades.length})'.toUpperCase(),
-                  style: const TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.w600,
-                  ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      'Pending Trades (${controller.trades.length}) '
+                          .toUpperCase(),
+                      style: const TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    CurrentProfit(profit: controller.totalLoss.value),
+                  ],
                 ),
               ),
             ),
@@ -215,6 +263,37 @@ class HomePage extends StatelessWidget {
                 )),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class CurrentProfit extends StatefulWidget {
+  const CurrentProfit({super.key, required this.profit});
+
+  // final double profit;
+  final double profit;
+
+  @override
+  State<CurrentProfit> createState() => _CurrentProfitState();
+}
+
+class _CurrentProfitState extends State<CurrentProfit> {
+  bool visible = false;
+
+  @override
+  void initState() {
+    super.initState();
+    visible = MyBox.readProfitViewSetting() ?? false;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      visible ? widget.profit.toStringAsFixed(2).toUpperCase() : "",
+      style: const TextStyle(
+        fontSize: 20,
+        fontWeight: FontWeight.w600,
       ),
     );
   }

@@ -18,6 +18,7 @@ dependencies:
   firebase_messaging: 14.6.4
   flutter_local_notifications: 15.0.0
   restart_app: 1.2.1
+  flutter_windowmanager: 0.2.0
   flutter: 
     sdk: flutter
 

@@ -1,0 +1,8 @@
+# create post request
+
+POST https://binance-spot-trade.spideyworld.co.in/orders/future/replace-all
+Content-Type: application/json
+
+{
+	"symbol": "BTCUSDT"
+}

@@ -1,6 +1,5 @@
 import 'package:algo_trade/app/network/trade_provider.dart';
 import 'package:algo_trade/app/routes/app_pages.dart';
-import 'package:algo_trade/utils/constants.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
@@ -14,47 +13,13 @@ class SplashController extends GetxController {
 
   @override
   void onReady() {
-    readUrl();
     Future.delayed(const Duration(seconds: 1), () {
       Get.offNamed(Routes.HOME);
     });
   }
 
-  void readUrl() {
-    final url = box.read('api_url');
-    if (url == null) {
-      box.write('api_url', kApiUrl);
-    } else {
-      kApiUrl = url;
-    }
-  }
-
   verifyToken() async {
-    try {
-      final token = box.read(kTokenKey);
-
-      if (token == null) {
-        Get.offNamed(Routes.LOGIN);
-        return;
-      }
-
-      final response = await tradesProvider.get(kTokenVerifyUrl, headers: {
-        "authorization": "Bearer $token",
-      });
-
-      if (response.statusCode != 200) {
-        Fluttertoast.showToast(
-          msg: "Session expired",
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.CENTER,
-        );
-
-        Get.offNamed(Routes.LOGIN);
-        return;
-      }
-
-      Get.offNamed(Routes.HOME);
-    } catch (e) {
+    try {} catch (e) {
       Fluttertoast.showToast(
         msg: e.toString(),
         toastLength: Toast.LENGTH_SHORT,

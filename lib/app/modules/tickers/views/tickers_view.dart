@@ -110,79 +110,85 @@ class TickerItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Wrap(
-          direction: Axis.horizontal,
-          runSpacing: 6,
-          children: [
-            KeyValue(
-              title: "SYMBOL",
-              value: "${ticker.symbol}",
-              titleStyle: titleStyle,
-              valueStyle: valueStyle,
-            ),
-            KeyValue(
-              title: "Buy Percent",
-              value: "${ticker.buyPercent} %",
-              titleStyle: titleStyle,
-              valueStyle: buyValueStyle,
-            ),
-            KeyValue(
-              title: "Sell Percent",
-              value: "${ticker.sellPercent} %",
-              titleStyle: titleStyle,
-              valueStyle: sellValueStyle,
-            ),
-            KeyValue(
-              title: "OOMP Enabled",
-              value: "${ticker.oomp}",
-              titleStyle: titleStyle,
-              valueStyle: valueStyle,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                IconButton(
-                  onPressed: () {
-                    Get.toNamed(Routes.TICKER_EDIT, arguments: ticker);
-                  },
-                  icon: const Icon(Icons.edit),
-                  color: Colors.blue,
-                ),
-                IconButton(
-                  onPressed: () async {
-                    await Get.dialog<bool>(
-                      AlertDialog(
-                        title: const Text("Delete Ticker"),
-                        content: const Text(
-                            "Are you sure you want to delete this ticker?"),
-                        actions: [
-                          TextButton(
-                            onPressed: () {
-                              Get.back(result: false);
-                            },
-                            child: const Text("Cancel"),
-                          ),
-                          TextButton(
-                            onPressed: () async {
-                              Get.back(result: true);
-                            },
-                            child: const Text("Delete"),
-                          ),
-                        ],
-                      ),
-                    );
-                  },
-                  icon: const Icon(Icons.delete),
-                  color: Colors.red,
-                  padding: const EdgeInsets.only(right: 0),
-                  constraints: const BoxConstraints(),
-                ),
-              ],
-            ),
-          ],
+    return GestureDetector(
+      onTap: () {
+        Get.toNamed(Routes.TICKER_EDIT, arguments: ticker);
+      },
+      child: Card(
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Wrap(
+            direction: Axis.horizontal,
+            runSpacing: 6,
+            children: [
+              KeyValue(
+                title: "SYMBOL",
+                value: "${ticker.symbol}",
+                titleStyle: titleStyle,
+                valueStyle: valueStyle,
+              ),
+              KeyValue(
+                title: "Buy Percent",
+                value: "${ticker.buyPercent} %",
+                titleStyle: titleStyle,
+                valueStyle: buyValueStyle,
+              ),
+              KeyValue(
+                title: "Sell Percent",
+                value: "${ticker.sellPercent} %",
+                titleStyle: titleStyle,
+                valueStyle: sellValueStyle,
+              ),
+              KeyValue(
+                title: "OOMP Enabled",
+                value: "${ticker.oomp}",
+                titleStyle: titleStyle,
+                valueStyle: valueStyle,
+              ),
+              // Row(
+              //   mainAxisAlignment: MainAxisAlignment.end,
+              //   children: [
+              //     IconButton(
+              //       onPressed: () {
+              //         Get.toNamed(Routes.TICKER_EDIT, arguments: ticker);
+              //       },
+              //       icon: const Icon(Icons.edit),
+              //       color: Colors.blue,
+              //     ),
+              //     IconButton(
+              //       onPressed: () async {
+              //         await Get.dialog<bool>(
+              //           AlertDialog(
+              //             title: const Text("Delete Ticker"),
+              //             content: const Text(
+              //                 "Are you sure you want to delete this ticker?"),
+              //             actions: [
+              //               TextButton(
+              //                 onPressed: () {
+              //                   Get.back(result: false);
+              //                 },
+              //                 child: const Text("Cancel"),
+              //               ),
+              //               TextButton(
+              //                 onPressed: () async {
+              //                   Get.back(result: true);
+              //                 },
+              //                 child: const Text("Delete"),
+              //               ),
+
+              //             ],
+              //           ),
+              //         );
+              //       },
+              //       icon: const Icon(Icons.delete),
+              //       color: Colors.red,
+              //       padding: const EdgeInsets.only(right: 0),
+              //       constraints: const BoxConstraints(),
+              //     ),
+              //   ],
+              // ),
+            ],
+          ),
         ),
       ),
     );

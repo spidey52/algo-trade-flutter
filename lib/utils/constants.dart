@@ -1,27 +1,37 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:get_storage/get_storage.dart';
 
 const kTokenKey = 'token';
+const kLoggedInUser = 'loggedInUser';
 String firebaseToken = '';
 
 const kProfitColor = Colors.green;
 const kLossColor = Colors.red;
 const kNeutralColor = Colors.grey;
 
-String kApiUrl = "http://52.66.39.113:9001";
-const kBaseUrl = "https://magadhmahan.spideyworld.co.in/api/v1";
+const users = {
+  "satyam": "https://binance-spot-trade.spideyworld.co.in",
+  "sudhanshu": "http://52.66.39.113:9001",
+};
 
-const kLoginUrl = "$kBaseUrl/admin/users/login/request";
-const kLoginVerifyUrl = "$kBaseUrl/admin/users/login/verify";
-const kTokenVerifyUrl = "$kBaseUrl/admin/users/token/verify";
+get loggedInUser {
+  final box = GetStorage();
+  return box.read(kLoggedInUser) ?? 'sudhanshu';
+}
 
-String kFcmTokenUrl = "$kApiUrl/fcm";
-String kTradeList = '$kApiUrl/trades';
-String kOrders = '$kApiUrl/orders';
-String kGridOrder = '$kOrders/grid';
-String kTickerList = '$kApiUrl/tickers';
-String kReportProfit = '$kApiUrl/reports';
-String kProfit = "$kTradeList/profit";
+get availableUsers => users.keys.toList();
+
+// const kApiUrl = "http://52.66.39.113:9001";
+get kApiUrl => users[loggedInUser];
+
+get kFcmTokenUrl => "$kApiUrl/fcm";
+get kTradeList => '$kApiUrl/trades';
+get kOrders => '$kApiUrl/orders';
+get kGridOrder => '$kOrders/grid';
+get kTickerList => '$kApiUrl/tickers';
+get kReportProfit => '$kApiUrl/reports';
+get kProfit => "$kTradeList/profit";
 
 final kActiveButtonStyle = ButtonStyle(
   backgroundColor: MaterialStateProperty.all<Color>(Colors.redAccent),

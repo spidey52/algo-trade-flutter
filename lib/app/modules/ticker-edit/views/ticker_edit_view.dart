@@ -13,6 +13,33 @@ class TickerEditView extends GetView<TickerEditController> {
       appBar: AppBar(
         title: const Text('Edit Ticker'),
         centerTitle: true,
+        actions: [
+          IconButton(
+            onPressed: () async {
+              await Get.dialog<bool>(AlertDialog(
+                title: const Text("Delete Ticker"),
+                content:
+                    const Text("Are you sure you want to delete this ticker?"),
+                actions: [
+                  TextButton(
+                    onPressed: () {
+                      Get.back(result: false);
+                    },
+                    child: const Text("Cancel"),
+                  ),
+                  TextButton(
+                    onPressed: () async {
+                      Get.back(result: true);
+                    },
+                    child: const Text("Delete"),
+                  ),
+                ],
+              ));
+            },
+            icon: const Icon(Icons.delete),
+            color: Colors.red,
+          ),
+        ],
       ),
       body: Obx(
         () => TickerForm(

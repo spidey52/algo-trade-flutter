@@ -26,6 +26,10 @@ class MoreView extends GetView<MoreController> {
         title: 'ORDERS PAGE',
         route: Routes.ORDERS,
       ),
+      const MoreListItem(
+        title: "SETTINGS PAGE",
+        route: Routes.SETTING,
+      ),
     ];
   }
 

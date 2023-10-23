@@ -11,6 +11,7 @@ class Trade {
   int? iV;
   double? sellPrice;
   int? sellTime;
+  dynamic ltp;
 
   Trade(
       {this.sId,
@@ -24,6 +25,7 @@ class Trade {
       // this.updatedAt,
       this.iV,
       this.sellPrice,
+      this.ltp,
       this.sellTime});
 
   Trade.fromJson(Map<String, dynamic> json) {
@@ -39,6 +41,7 @@ class Trade {
     iV = json['__v'];
     sellPrice = json['sellPrice']?.toDouble();
     sellTime = json['sellTime'];
+    ltp = json['ltp'];
   }
 
   Map<String, dynamic> toJson() {

@@ -2,6 +2,8 @@ import 'package:get/get.dart';
 
 import '../modules/add_ticker/bindings/add_ticker_binding.dart';
 import '../modules/add_ticker/views/add_ticker_view.dart';
+import '../modules/checkLiquidation/bindings/check_liquidation_binding.dart';
+import '../modules/checkLiquidation/views/check_liquidation_view.dart';
 import '../modules/completed/bindings/completed_binding.dart';
 import '../modules/completed/views/completed_view.dart';
 import '../modules/grid-order/bindings/grid_order_binding.dart';
@@ -16,6 +18,8 @@ import '../modules/orders/bindings/orders_binding.dart';
 import '../modules/orders/views/orders_view.dart';
 import '../modules/report-page/bindings/report_page_binding.dart';
 import '../modules/report-page/views/report_page_view.dart';
+import '../modules/setting/bindings/setting_binding.dart';
+import '../modules/setting/views/setting_view.dart';
 import '../modules/splash/bindings/splash_binding.dart';
 import '../modules/splash/views/splash_view.dart';
 import '../modules/ticker-edit/bindings/ticker_edit_binding.dart';
@@ -85,6 +89,16 @@ class AppPages {
       name: _Paths.ORDERS,
       page: () => const OrdersView(),
       binding: OrdersBinding(),
+    ),
+    GetPage(
+      name: _Paths.SETTING,
+      page: () => const SettingView(),
+      binding: SettingBinding(),
+    ),
+    GetPage(
+      name: _Paths.CHECK_LIQUIDATION,
+      page: () => const CheckLiquidationView(),
+      binding: CheckLiquidationBinding(),
     ),
   ];
 }

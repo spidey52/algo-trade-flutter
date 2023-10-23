@@ -1,3 +1,4 @@
+import 'package:algo_trade/utils/constants.dart';
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
@@ -17,6 +18,7 @@ class GridOrderView extends GetView<GridOrderController> {
       child: Wrap(
         runSpacing: 20,
         children: [
+          Text("${loggedInUser.toUpperCase()}"),
           OutlinedTextField(
             hint: "Symbol",
             controller: controller.symbolController,
@@ -59,6 +61,19 @@ class GridOrderView extends GetView<GridOrderController> {
                     value: controller.side.value == 'BUY',
                     onChanged: (val) {
                       controller.side.value = val ? 'BUY' : 'SELL';
+                    })
+              ],
+            ),
+          ),
+          Obx(
+            () => Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Text("SKIP"),
+                Switch(
+                    value: controller.skipOne.value,
+                    onChanged: (val) {
+                      controller.skipOne.value = val;
                     })
               ],
             ),

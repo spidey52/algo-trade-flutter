@@ -8,10 +8,22 @@ class ReportPageController extends GetxController {
   final TradesProvider tradesProvider = TradesProvider();
 
   RxList<ReportResponse> reportResponse = <ReportResponse>[].obs;
+  final daysCount = 0.obs;
+
+  RxInt count = 0.obs;
 
   @override
   void onInit() {
     fetchReports();
+
+    ever(reportResponse, (callback) {
+      final first = DateTime.parse(reportResponse.first.date ?? "");
+      final last = DateTime.parse(reportResponse.last.date ?? "");
+
+      final totalDays = first.difference(last);
+      daysCount.value = totalDays.inDays;
+    });
+
     super.onInit();
   }
 

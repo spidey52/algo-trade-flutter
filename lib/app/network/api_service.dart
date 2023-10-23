@@ -1,10 +1,11 @@
+import 'package:algo_trade/utils/constants.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 
 class ApiService extends GetConnect {
   final box = GetStorage();
 
-  get url => box.read("api_url");
+  get url => kApiUrl;
 
   Future<Response> fetchFutureOrders(String symbol) async {
     return await get("$url/orders/future", query: {

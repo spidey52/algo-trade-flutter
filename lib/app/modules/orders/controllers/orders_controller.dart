@@ -39,6 +39,15 @@ class OrdersController extends GetxController {
 
   @override
   void onInit() {
+    ever(
+      search,
+      (callback) => box.write(kOrderSearchKey, search.value),
+    );
+
+    ever(isBuy, (callback) {
+      fetchOrders();
+    });
+
     search.value = box.read(kOrderSearchKey) ?? "";
     if (arguments != null && arguments.isNotEmpty) {
       search.value = arguments;
@@ -48,11 +57,6 @@ class OrdersController extends GetxController {
     debounce(search, (callback) {
       fetchOrders();
     }, time: const Duration(milliseconds: 500));
-
-    ever(
-      search,
-      (callback) => box.write(kOrderSearchKey, search.value),
-    );
 
     super.onInit();
   }
