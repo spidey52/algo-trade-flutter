@@ -1,3 +1,4 @@
+import 'package:algo_trade/utils/constants.dart';
 import 'package:algo_trade/widgets/ticker_form.dart';
 import 'package:flutter/material.dart';
 
@@ -29,6 +30,7 @@ class TickerEditView extends GetView<TickerEditController> {
                   ),
                   TextButton(
                     onPressed: () async {
+                      showToast("Ticker deletion is not supported yet");
                       Get.back(result: true);
                     },
                     child: const Text("Delete"),

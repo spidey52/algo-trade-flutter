@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 
 const kTokenKey = 'token';
@@ -12,7 +13,9 @@ const kNeutralColor = Colors.grey;
 
 const users = {
   "satyam": "https://binance-spot-trade.spideyworld.co.in",
-  "sudhanshu": "http://52.66.39.113:9001",
+  "gcs": "http://13.127.1.63:9001",
+  "amit": "http://3.109.94.54:9001",
+  "sudhanshu": "http://13.235.211.38:9001"
 };
 
 get loggedInUser {
@@ -31,6 +34,7 @@ get kOrders => '$kApiUrl/orders';
 get kGridOrder => '$kOrders/grid';
 get kTickerList => '$kApiUrl/tickers';
 get kReportProfit => '$kApiUrl/reports';
+get kReportCard => '$kApiUrl/reports/future/card';
 get kProfit => "$kTradeList/profit";
 
 final kActiveButtonStyle = ButtonStyle(
@@ -49,4 +53,12 @@ void showToast(String message) {
     gravity: ToastGravity.BOTTOM,
     timeInSecForIosWeb: 1,
   );
+}
+
+void handleApiError(Response response) {
+  String message = response.body['message'] ??
+      response.body['error'] ??
+      'Something went wrong';
+
+  showToast(message);
 }

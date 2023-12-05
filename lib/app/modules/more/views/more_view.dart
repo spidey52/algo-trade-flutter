@@ -30,6 +30,10 @@ class MoreView extends GetView<MoreController> {
         title: "SETTINGS PAGE",
         route: Routes.SETTING,
       ),
+      const MoreListItem(
+        title: "BINANCE PAGE",
+        route: Routes.BINANCE,
+      ),
     ];
   }
 

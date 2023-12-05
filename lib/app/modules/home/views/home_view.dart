@@ -1,4 +1,5 @@
 import 'package:algo_trade/app/data/models/binance_stream.dart';
+import 'package:algo_trade/app/data/models/dashboard_card.dart';
 import 'package:algo_trade/app/modules/completed/views/completed_view.dart';
 import 'package:algo_trade/app/modules/grid-order/views/grid_order_view.dart';
 import 'package:algo_trade/app/modules/home/views/profit_view.dart';
@@ -164,7 +165,8 @@ class HomePage extends StatelessWidget {
       onRefresh: () async {
         await controller.fetchProfitBySymbol();
         await controller.fetchTrades();
-        await controller.fetchProfit();
+        // await controller.fetchProfit();
+        await controller.fetchDashboardCard();
         controller.reconnect();
       },
       child: SingleChildScrollView(
@@ -172,32 +174,9 @@ class HomePage extends StatelessWidget {
         child: Column(
           children: [
             const SizedBox(height: 10),
-            Row(
-              children: [
-                Obx(
-                  () => ProfitView(
-                    title: "Today Profit",
-                    amount: controller.todayProfit.value,
-                  ),
-                ),
-                Obx(
-                  () => ProfitView(
-                    title: "Total Profit",
-                    amount: controller.totalProfit.value,
-                  ),
-                ),
-              ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                IconButton(
-                  onPressed: () {
-                    controller.fetchProfitBySymbol();
-                  },
-                  icon: const Icon(Icons.refresh),
-                ),
-              ],
+            Obx(
+              () => ScrollCard(
+                  cardResult: controller.dashboardCard.value.result ?? []),
             ),
             ProfityBySymbol(controller: controller),
             const SizedBox(height: 20),
@@ -208,6 +187,7 @@ class HomePage extends StatelessWidget {
                 },
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Text(
                       'Pending Trades (${controller.trades.length}) '
@@ -218,6 +198,12 @@ class HomePage extends StatelessWidget {
                       ),
                     ),
                     CurrentProfit(profit: controller.totalLoss.value),
+                    OutlinedButton(
+                      onPressed: () {
+                        Get.toNamed(Routes.BINANCE);
+                      },
+                      child: const Text("B", style: TextStyle(fontSize: 20)),
+                    )
                   ],
                 ),
               ),
@@ -334,3 +320,46 @@ class ProfityBySymbol extends StatelessWidget {
     );
   }
 }
+
+class ScrollCard extends StatelessWidget {
+  const ScrollCard({
+    super.key,
+    required this.cardResult,
+  });
+
+  final List<CardResult> cardResult;
+
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      physics: const BouncingScrollPhysics(),
+      scrollDirection: Axis.horizontal,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 8),
+        child: Row(
+          children: [
+            ...cardResult
+                .map(
+                  (e) => SizedBox(
+                    width: 200,
+                    child: ProfitView(
+                      title: e.title ?? "",
+                      amount: (e.profit ?? 0.0).toStringAsFixed(2),
+                    ),
+                  ),
+                )
+                .toList(),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+List<MaterialColor> cardColors = [
+  Colors.blue,
+  Colors.green,
+  Colors.red,
+  Colors.lightBlue,
+  Colors.pink,
+];

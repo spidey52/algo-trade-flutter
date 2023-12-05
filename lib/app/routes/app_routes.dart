@@ -16,6 +16,7 @@ abstract class Routes {
   static const ORDERS = _Paths.ORDERS;
   static const SETTING = _Paths.SETTING;
   static const CHECK_LIQUIDATION = _Paths.CHECK_LIQUIDATION;
+  static const BINANCE = _Paths.BINANCE;
 }
 
 abstract class _Paths {
@@ -33,4 +34,5 @@ abstract class _Paths {
   static const ORDERS = '/orders';
   static const SETTING = '/setting';
   static const CHECK_LIQUIDATION = '/check-liquidation';
+  static const BINANCE = '/binance';
 }

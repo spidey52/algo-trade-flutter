@@ -61,7 +61,7 @@ class TickerEditController extends GetxController {
       buyPercentController.text = _binanceTicker.buyPercent.toString();
       sellPercentController.text = _binanceTicker.sellPercent.toString();
       amountController.text = _binanceTicker.amount.toString();
-      loopEnabled.value = _binanceTicker.loopEnabled ?? false;
+      loopEnabled.value = _binanceTicker.oomp ?? false;
     }
 
     super.onInit();

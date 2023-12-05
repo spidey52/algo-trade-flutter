@@ -2,6 +2,8 @@ import 'package:get/get.dart';
 
 import '../modules/add_ticker/bindings/add_ticker_binding.dart';
 import '../modules/add_ticker/views/add_ticker_view.dart';
+import '../modules/binance/bindings/binance_binding.dart';
+import '../modules/binance/views/binance_view.dart';
 import '../modules/checkLiquidation/bindings/check_liquidation_binding.dart';
 import '../modules/checkLiquidation/views/check_liquidation_view.dart';
 import '../modules/completed/bindings/completed_binding.dart';
@@ -99,6 +101,11 @@ class AppPages {
       name: _Paths.CHECK_LIQUIDATION,
       page: () => const CheckLiquidationView(),
       binding: CheckLiquidationBinding(),
+    ),
+    GetPage(
+      name: _Paths.BINANCE,
+      page: () => const BinanceView(),
+      binding: BinanceBinding(),
     ),
   ];
 }

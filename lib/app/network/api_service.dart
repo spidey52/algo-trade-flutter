@@ -25,6 +25,10 @@ class ApiService extends GetConnect {
       "symbol": symbol,
     });
   }
+
+  Future<Response> fetchBalance() async {
+    return await get("$url/binance/balance");
+  }
 }
 
 class BinanceOrderResponse {
