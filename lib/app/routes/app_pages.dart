@@ -10,6 +10,8 @@ import '../modules/completed/bindings/completed_binding.dart';
 import '../modules/completed/views/completed_view.dart';
 import '../modules/grid-order/bindings/grid_order_binding.dart';
 import '../modules/grid-order/views/grid_order_view.dart';
+import '../modules/grouped_pending_trades/bindings/grouped_pending_trades_binding.dart';
+import '../modules/grouped_pending_trades/views/grouped_pending_trades_view.dart';
 import '../modules/home/bindings/home_binding.dart';
 import '../modules/home/views/home_view.dart';
 import '../modules/login/bindings/login_binding.dart';
@@ -106,6 +108,11 @@ class AppPages {
       name: _Paths.BINANCE,
       page: () => const BinanceView(),
       binding: BinanceBinding(),
+    ),
+    GetPage(
+      name: _Paths.GROUPED_PENDING_TRADES,
+      page: () => const GroupedPendingTradesView(),
+      binding: GroupedPendingTradesBinding(),
     ),
   ];
 }

@@ -1,6 +1,6 @@
 import 'package:algo_trade/app/data/models/future_trade.dart';
+import 'package:algo_trade/main.dart';
 import 'package:flutter/material.dart';
-
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
@@ -12,57 +12,57 @@ class CompletedView extends GetView<CompletedController> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-        padding: const EdgeInsets.symmetric(
-          vertical: 10,
-          horizontal: 4,
-        ),
-        child: Column(
-          children: [
-            Obx(
-              () => Text(
-                'Trades count (${controller.count})'.toUpperCase(),
-                style: const TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-            ),
-            const SizedBox(height: 10),
-            Padding(
-              padding: const EdgeInsets.all(4.0),
-              child: TextField(
-                controller: controller.searchController,
-                decoration: InputDecoration(
-                  hintText: "Search",
-                  contentPadding: const EdgeInsets.symmetric(
-                    vertical: 0,
-                    horizontal: 20,
-                  ),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(4),
-                  ),
-                ),
-              ),
-            ),
-            const SizedBox(height: 10),
-            Obx(
-              () => Expanded(
-                child: RefreshIndicator(
-                  onRefresh: () async {
-                    await controller.fetchCompletedTrades();
-                  },
-                  child: ListView.builder(
-                    itemCount: controller.completedTrades.length,
-                    physics: const BouncingScrollPhysics(),
-                    itemBuilder: (context, index) => CompletedTradeItem(
-                      trade: controller.completedTrades[index],
+      padding: const EdgeInsets.symmetric(
+        vertical: 10,
+        horizontal: 4,
+      ),
+      child: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 4.0, vertical: 0.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Obx(
+                  () => Text(
+                    'Trades (${controller.count})'.toUpperCase(),
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
                     ),
                   ),
                 ),
+                Obx(
+                  () => TickerSelector(
+                    selected: controller.search.value,
+                    onChanged: (val) {
+                      controller.search.value = val;
+                    },
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 4.0),
+          Obx(
+            () => Expanded(
+              child: RefreshIndicator(
+                onRefresh: () async {
+                  await controller.fetchCompletedTrades();
+                },
+                child: ListView.builder(
+                  itemCount: controller.completedTrades.length,
+                  physics: const BouncingScrollPhysics(),
+                  itemBuilder: (context, index) => CompletedTradeItem(
+                    trade: controller.completedTrades[index],
+                  ),
+                ),
               ),
             ),
-          ],
-        ));
+          ),
+        ],
+      ),
+    );
   }
 }
 

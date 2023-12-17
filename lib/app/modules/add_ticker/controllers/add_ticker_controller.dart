@@ -11,6 +11,7 @@ class AddTickerController extends GetxController {
   TextEditingController buyPercentController = TextEditingController();
   TextEditingController sellPercentController = TextEditingController();
   TextEditingController amountController = TextEditingController();
+  TextEditingController openOrdersController = TextEditingController();
 
   RxBool loopEnabled = false.obs;
 

@@ -17,6 +17,7 @@ abstract class Routes {
   static const SETTING = _Paths.SETTING;
   static const CHECK_LIQUIDATION = _Paths.CHECK_LIQUIDATION;
   static const BINANCE = _Paths.BINANCE;
+  static const GROUPED_PENDING_TRADES = _Paths.GROUPED_PENDING_TRADES;
 }
 
 abstract class _Paths {
@@ -35,4 +36,5 @@ abstract class _Paths {
   static const SETTING = '/setting';
   static const CHECK_LIQUIDATION = '/check-liquidation';
   static const BINANCE = '/binance';
+  static const GROUPED_PENDING_TRADES = '/grouped-pending-trades';
 }

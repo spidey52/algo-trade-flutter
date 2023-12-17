@@ -9,6 +9,7 @@ class TickerForm extends StatelessWidget {
     required this.buyPercentController,
     required this.sellPercentController,
     required this.amountController,
+    required this.openOrdersController,
 
     // switch controller
     required this.loopEnabled,
@@ -25,6 +26,7 @@ class TickerForm extends StatelessWidget {
   final TextEditingController buyPercentController;
   final TextEditingController sellPercentController;
   final TextEditingController amountController;
+  final TextEditingController openOrdersController;
 
   // switch controller
   final bool loopEnabled;
@@ -54,16 +56,27 @@ class TickerForm extends StatelessWidget {
           TickerTextField(
             controller: buyPercentController,
             label: "Buy Percent",
-            keyboardType: TextInputType.number,
+            keyboardType: const TextInputType.numberWithOptions(
+              decimal: true,
+            ),
           ),
           TickerTextField(
             controller: sellPercentController,
             label: "Sell Percent",
-            keyboardType: TextInputType.number,
+            keyboardType: const TextInputType.numberWithOptions(
+              decimal: true,
+            ),
           ),
           TickerTextField(
             controller: amountController,
             label: "Amount",
+            keyboardType: const TextInputType.numberWithOptions(
+              decimal: true,
+            ),
+          ),
+          TickerTextField(
+            controller: openOrdersController,
+            label: "Open Orders",
             keyboardType: TextInputType.number,
           ),
           Row(

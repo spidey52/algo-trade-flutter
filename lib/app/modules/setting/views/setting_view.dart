@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import 'package:get/get.dart';
 
 import '../controllers/setting_controller.dart';
@@ -25,9 +24,9 @@ class SettingView extends GetView<SettingController> {
                   style: TextStyle(fontSize: 16),
                 ),
                 Obx(() => Switch(
-                      value: controller.setting.value,
+                      value: controller.priceController.isProfitVisible.value,
                       onChanged: (val) {
-                        controller.toggleProfitViewSetting(val);
+                        controller.priceController.isProfitVisible.value = val;
                       },
                     )),
               ],

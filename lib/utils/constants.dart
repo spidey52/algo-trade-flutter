@@ -12,10 +12,10 @@ const kLossColor = Colors.red;
 const kNeutralColor = Colors.grey;
 
 const users = {
-  "satyam": "https://binance-spot-trade.spideyworld.co.in",
+  // "satyam": "https://binance-spot-trade.spideyworld.co.in",
   "gcs": "http://13.127.1.63:9001",
-  "amit": "http://3.109.94.54:9001",
-  "sudhanshu": "http://13.235.211.38:9001"
+  // "amit": "http://3.109.94.54:9001",
+  // "sudhanshu": "http://13.235.211.38:9001"
 };
 
 get loggedInUser {
@@ -36,6 +36,10 @@ get kTickerList => '$kApiUrl/tickers';
 get kReportProfit => '$kApiUrl/reports';
 get kReportCard => '$kApiUrl/reports/future/card';
 get kProfit => "$kTradeList/profit";
+
+// Grouped Trades
+get kGroupedPendingTrades => "$kTradeList/grouped/pending";
+get kGroupedCompletedTrades => "$kTradeList/grouped/completed";
 
 final kActiveButtonStyle = ButtonStyle(
   backgroundColor: MaterialStateProperty.all<Color>(Colors.redAccent),

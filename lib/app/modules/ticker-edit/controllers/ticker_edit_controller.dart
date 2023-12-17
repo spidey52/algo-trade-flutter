@@ -1,9 +1,8 @@
 import 'package:algo_trade/app/data/models/ticker.dart';
 import 'package:algo_trade/app/network/trade_provider.dart';
+import 'package:algo_trade/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
-import 'package:algo_trade/utils/constants.dart';
 
 class TickerEditController extends GetxController {
   late BinanceTicker _binanceTicker;
@@ -14,6 +13,7 @@ class TickerEditController extends GetxController {
   TextEditingController buyPercentController = TextEditingController();
   TextEditingController sellPercentController = TextEditingController();
   TextEditingController amountController = TextEditingController();
+  TextEditingController openOrdersController = TextEditingController();
 
   RxBool loopEnabled = false.obs;
 
@@ -36,6 +36,7 @@ class TickerEditController extends GetxController {
           "amount": amountController.text,
           "loopEnabled": loopEnabled.value,
           "oomp": loopEnabled.value,
+          "maxPendingOrders": openOrdersController.text,
         },
       );
 
@@ -61,6 +62,7 @@ class TickerEditController extends GetxController {
       buyPercentController.text = _binanceTicker.buyPercent.toString();
       sellPercentController.text = _binanceTicker.sellPercent.toString();
       amountController.text = _binanceTicker.amount.toString();
+      openOrdersController.text = _binanceTicker.maxPendingOrders.toString();
       loopEnabled.value = _binanceTicker.oomp ?? false;
     }
 

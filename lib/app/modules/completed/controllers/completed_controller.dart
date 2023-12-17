@@ -21,11 +21,13 @@ class CompletedController extends GetxController {
       search.value = searchController.text;
     });
 
-    debounce(
-      search,
-      (_) => fetchCompletedTrades(),
-      time: const Duration(milliseconds: 500),
-    );
+    ever(search, (_) => fetchCompletedTrades());
+
+    // debounce(
+    //   search,
+    //   (_) => fetchCompletedTrades(),
+    //   time: const Duration(milliseconds: 500),
+    // );
   }
 
   fetchCompletedTrades() async {

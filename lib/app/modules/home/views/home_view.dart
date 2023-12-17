@@ -6,10 +6,9 @@ import 'package:algo_trade/app/modules/home/views/profit_view.dart';
 import 'package:algo_trade/app/modules/home/views/trade_item_view.dart';
 import 'package:algo_trade/app/modules/more/views/more_view.dart';
 import 'package:algo_trade/app/routes/app_pages.dart';
-import 'package:algo_trade/utils/box.storage.dart';
+import 'package:algo_trade/main.dart';
 import 'package:algo_trade/utils/constants.dart';
 import 'package:flutter/material.dart';
-
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:pie_chart/pie_chart.dart';
@@ -163,11 +162,8 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return RefreshIndicator(
       onRefresh: () async {
-        await controller.fetchProfitBySymbol();
-        await controller.fetchTrades();
-        // await controller.fetchProfit();
-        await controller.fetchDashboardCard();
-        controller.reconnect();
+        await controller.fetchData();
+        controller.priceController.reconnect();
       },
       child: SingleChildScrollView(
         physics: const ScrollPhysics(),
@@ -179,54 +175,38 @@ class HomePage extends StatelessWidget {
                   cardResult: controller.dashboardCard.value.result ?? []),
             ),
             ProfityBySymbol(controller: controller),
-            const SizedBox(height: 20),
-            Obx(
-              () => GestureDetector(
-                onDoubleTap: () {
-                  controller.reconnect();
-                },
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Text(
-                      'Pending Trades (${controller.trades.length}) '
-                          .toUpperCase(),
-                      style: const TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.w600,
+            Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 8.0,
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  InkWell(
+                    onTap: () => Get.toNamed(Routes.GROUPED_PENDING_TRADES),
+                    onLongPress: () => Get.toNamed(Routes.BINANCE),
+                    child: Obx(
+                      () => Text(
+                        'Pending Trades (${controller.trades.length}) '
+                            .toUpperCase(),
+                        style: const TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.w600,
+                        ),
                       ),
                     ),
-                    CurrentProfit(profit: controller.totalLoss.value),
-                    OutlinedButton(
-                      onPressed: () {
-                        Get.toNamed(Routes.BINANCE);
-                      },
-                      child: const Text("B", style: TextStyle(fontSize: 20)),
-                    )
-                  ],
-                ),
+                  ),
+                  TickerSelector(
+                    selected: controller.search.value,
+                    onChanged: (val) {
+                      controller.search.value = val;
+                    },
+                  ),
+                ],
               ),
             ),
             const SizedBox(height: 10),
-            Container(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 8,
-                vertical: 4,
-              ),
-              height: 50,
-              child: TextField(
-                controller: controller.searchController,
-                decoration: const InputDecoration(
-                  contentPadding: EdgeInsets.symmetric(
-                    horizontal: 20,
-                    vertical: 10,
-                  ),
-                  hintText: 'search',
-                  border: OutlineInputBorder(),
-                ),
-              ),
-            ),
             Obx(() => SizedBox(
                   height: Get.height - 260,
                   child: RefreshIndicator(
@@ -237,49 +217,19 @@ class HomePage extends StatelessWidget {
                       itemCount: controller.trades.length,
                       physics: const BouncingScrollPhysics(),
                       itemBuilder: (context, idx) {
-                        return TradeItem(
-                          trade: controller.trades[idx],
-                          ticker: controller.tickerStreamMap[
-                                  controller.trades[idx].symbol] ??
-                              BinanceStream(),
-                        );
+                        return Obx(() => TradeItem(
+                              trade: controller.trades[idx],
+                              ticker:
+                                  controller.priceController.tickerStreamMap[
+                                          controller.trades[idx].symbol] ??
+                                      BinanceStream(),
+                            ));
                       },
                     ),
                   ),
                 )),
           ],
         ),
-      ),
-    );
-  }
-}
-
-class CurrentProfit extends StatefulWidget {
-  const CurrentProfit({super.key, required this.profit});
-
-  // final double profit;
-  final double profit;
-
-  @override
-  State<CurrentProfit> createState() => _CurrentProfitState();
-}
-
-class _CurrentProfitState extends State<CurrentProfit> {
-  bool visible = false;
-
-  @override
-  void initState() {
-    super.initState();
-    visible = MyBox.readProfitViewSetting() ?? false;
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Text(
-      visible ? widget.profit.toStringAsFixed(2).toUpperCase() : "",
-      style: const TextStyle(
-        fontSize: 20,
-        fontWeight: FontWeight.w600,
       ),
     );
   }
@@ -297,7 +247,8 @@ class ProfityBySymbol extends StatelessWidget {
     return PieChart(
       dataMap: controller.mappedPieData,
       chartValuesOptions: const ChartValuesOptions(
-        decimalPlaces: 1,
+        decimalPlaces: 2,
+        showChartValuesInPercentage: true,
       ),
       legendOptions: const LegendOptions(
         legendPosition: LegendPosition.right,

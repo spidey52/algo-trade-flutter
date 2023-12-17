@@ -1,6 +1,5 @@
 import 'package:algo_trade/widgets/ticker_form.dart';
 import 'package:flutter/material.dart';
-
 import 'package:get/get.dart';
 
 import '../controllers/add_ticker_controller.dart';
@@ -22,6 +21,7 @@ class AddTickerView extends GetView<AddTickerController> {
           amountController: controller.amountController,
           isLoading: controller.isLoading.value,
           loopEnabled: controller.loopEnabled.value,
+          openOrdersController: controller.openOrdersController,
           onLoopEnabledChanged: controller.onLoopEnabledChanged,
           onSave: controller.saveTicker,
         ),

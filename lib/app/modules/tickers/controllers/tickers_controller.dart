@@ -15,6 +15,7 @@ class TickersController extends GetxController {
     try {
       final response = await _apiService.get(kTickerList, query: {
         "future": 'true',
+        "limit": '100',
       });
 
       if (response.statusCode != 200) {

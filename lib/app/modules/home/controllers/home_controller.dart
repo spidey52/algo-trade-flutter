@@ -1,36 +1,31 @@
-import 'dart:convert';
+import 'dart:async';
 
 import 'package:algo_trade/app/data/models/binance_stream.dart';
 import 'package:algo_trade/app/data/models/dashboard_card.dart';
 import 'package:algo_trade/app/data/models/future_trade.dart';
-import 'package:algo_trade/app/data/models/total_profit.dart';
 import 'package:algo_trade/app/data/models/trade.dart';
 import 'package:algo_trade/app/network/trade_provider.dart';
 import 'package:algo_trade/app/routes/app_pages.dart';
+import 'package:algo_trade/main.dart';
 import 'package:algo_trade/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:web_socket_channel/web_socket_channel.dart';
 
 final wsUrl = Uri.parse('wss://stream.binance.com:9443/ws/!miniTicker@arr');
 
 class HomeController extends GetxController {
   final box = GetStorage();
-  // final url = kApiUrl.obs;
-
   final count = 0.obs;
   final isLoading = false.obs;
   final market = 'FUTURE'.obs;
 
   final dashboardCard = DashboardCard().obs;
+  final tickerStreamMap = <String, BinanceStream>{}.obs;
 
   // profit view
   final profitLoading = false.obs;
-  final todayProfit = '0'.obs;
-  final totalProfit = '0'.obs;
-  final totalLoss = 0.0.obs;
 
   // pie chart view
   final pieLoading = false.obs;
@@ -38,104 +33,12 @@ class HomeController extends GetxController {
 
   final trades = <Trade>[].obs;
 
-  final tickers = <String>[].obs;
-
-  final tickerStreamMap = <String, BinanceStream>{}.obs;
-
-  // create a map of string and string
+  final priceController = Get.find<PriceController>();
 
   final TextEditingController searchController = TextEditingController();
   final search = "".obs;
 
-  late WebSocketChannel channel;
   late TradesProvider tradesProvider;
-
-  void useStreamData(result) {
-    for (var element in result) {
-      String key = element.symbol ?? "";
-      if (key == "") continue;
-      var previous = tickerStreamMap[key];
-      if (previous != null) {
-        element.prevPrice = previous.price;
-      }
-
-      tickerStreamMap[key] = element;
-    }
-
-    // trades.value = trades.where((trade) {
-    //   if (tickerStreamMap[trade.symbol] == null) return false;
-    //   return true;
-    // }).toList();
-
-    double loss = 0.0;
-
-    trades.sort((a, b) {
-      final astream = tickerStreamMap[a.symbol] ??
-          BinanceStream(
-            price: a.buyPrice,
-            prevPrice: a.buyPrice,
-            symbol: a.symbol,
-          );
-      final bstream = tickerStreamMap[b.symbol] ??
-          BinanceStream(
-            price: b.buyPrice,
-            prevPrice: b.buyPrice,
-            symbol: b.symbol,
-          );
-
-      final acp = a.buyPrice * a.quantity;
-      final bcp = b.buyPrice * b.quantity;
-
-      final asp = a.quantity * astream.price;
-      final bsp = b.quantity * bstream.price;
-
-      final aprofit = asp - acp;
-      final bprofit = bsp - bcp;
-
-      final aprofitPercent = (aprofit / acp) * 100;
-      final bprofirPercent = (bprofit / bcp) * 100;
-
-      return bprofirPercent.compareTo(aprofitPercent);
-    });
-
-    for (var trade in trades) {
-      final stream = tickerStreamMap[trade.symbol];
-      if (stream == null) continue;
-
-      final cp = trade.buyPrice * trade.quantity;
-      final sp = trade.quantity * stream.price;
-
-      final profit = sp - cp;
-
-      loss += profit;
-    }
-
-    totalLoss.value = loss.toPrecision(2);
-  }
-
-  void reconnect() async {
-    try {
-      Fluttertoast.showToast(msg: "Socket Reconnecting");
-      await channel.sink.close();
-
-      channel = WebSocketChannel.connect(wsUrl);
-      Fluttertoast.showToast(msg: "Socket reconnected");
-
-      channel.stream.listen(
-        (event) {
-          var streamjson = jsonDecode(event) as List;
-          final result = streamjson
-              .where((e) => tickers.contains(e['s']))
-              .map((e) => BinanceStream.fromJson(e))
-              .toList();
-
-          useStreamData(result);
-        },
-      );
-    } catch (e) {
-      Fluttertoast.showToast(msg: e.toString());
-    }
-  }
 
   Future<void> uploadFcmToken() async {
     try {
@@ -148,55 +51,30 @@ class HomeController extends GetxController {
     }
   }
 
+  Future<void> fetchData() async {
+    await fetchTrades();
+    await fetchDashboardCard();
+    await fetchProfitBySymbol();
+    await priceController.fetchTickers();
+  }
+
   @override
   void onInit() {
     super.onInit();
-    // FlutterWindowManager.addFlags(FlutterWindowManager.FLAG_SECURE);
-
-    ever(market, (_) {
-      fetchProfit();
-      fetchProfitBySymbol();
-      fetchTrades();
-    });
-
-    // socketConnection() {
-    //   Fluttertoast.showToast(msg: "Socket Connected");
-    //   channel = WebSocketChannel.connect(wsUrl);
-    //   return channel;
-    // }
 
     tradesProvider = TradesProvider();
     uploadFcmToken();
-    fetchProfitBySymbol();
 
-    channel = WebSocketChannel.connect(wsUrl);
+    fetchData();
 
-    channel.stream.listen(
-      (event) {
-        var streamjson = jsonDecode(event) as List;
-        final result = streamjson
-            .where((e) => tickers.contains(e['s']))
-            .map((e) => BinanceStream.fromJson(e))
-            .toList();
-
-        useStreamData(result);
-      },
-    );
-
-    fetchTrades();
-    // fetchProfit();
-    fetchDashboardCard();
-    fetchTickers();
-
-    searchController.addListener(() {
-      search.value = searchController.text;
+    ever(priceController.tickerStreamMap, (callback) {
+      tickerStreamMap.value = callback;
     });
 
-    debounce(
-      search,
-      (callback) => {fetchTrades()},
-      time: const Duration(milliseconds: 300),
-    );
+    ever(search, (callback) => fetchTrades());
+    ever(count, (callback) {
+      if (count.value == 0) fetchData();
+    });
   }
 
   void logout() {
@@ -215,13 +93,6 @@ class HomeController extends GetxController {
       var tradeBody = response.body['allTrades'] as List;
 
       if (market.value == "FUTURE") {
-        final dynamic tickerPriceMap = response.body['ltp'];
-
-        tickerPriceMap.forEach((key, value) {
-          tickerStreamMap[key] =
-              BinanceStream(symbol: key, price: double.tryParse(value) ?? 0.0);
-        });
-
         trades.value = tradeBody
             .map((e) => FutureTrade.fromJson(e))
             .map((e) => Trade(
@@ -229,24 +100,13 @@ class HomeController extends GetxController {
                   sellPrice: e.sellPrice,
                   symbol: e.symbol,
                   quantity: e.quantity ?? 0,
+                  ltp: priceController.tickerStreamMap[e.symbol]?.price ??
+                      e.buyPrice,
                 ))
             .toList();
       } else {
         trades.value = tradeBody.map((e) => Trade.fromJson(e)).toList();
       }
-    }
-  }
-
-  void fetchTickers() async {
-    try {
-      Response response =
-          await tradesProvider.getCall(kTickerList, market.value);
-      if (response.statusCode == 200) {
-        var tickerBody = response.body as List;
-        tickers.value = tickerBody.map((e) => e['symbol'].toString()).toList();
-      }
-    } catch (e) {
-      //
     }
   }
 
@@ -263,24 +123,6 @@ class HomeController extends GetxController {
       dashboardCard.value = data;
     } catch (e) {
       showToast(e.toString());
-    } finally {
-      profitLoading.value = false;
-    }
-  }
-
-  Future<void> fetchProfit() async {
-    try {
-      profitLoading.value = true;
-      Response response = await tradesProvider.getCall(kProfit, market.value);
-      if (response.statusCode != 200) {
-        return;
-      }
-      Profit data = Profit.fromJson(response.body);
-
-      todayProfit.value = data.todayProfit!.toStringAsFixed(2);
-      totalProfit.value = data.totalProfit!.toStringAsFixed(2);
-    } catch (e) {
-      // print(e.toString());
     } finally {
       profitLoading.value = false;
     }
@@ -308,20 +150,12 @@ class HomeController extends GetxController {
   }
 
   get mappedPieData {
-    // String double map
-
     Map<String, double> data = {};
 
     for (var element in pieData) {
       data[element.symbol ?? ""] = element.profit ?? 0;
     }
     return data;
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    channel.sink.close(1);
   }
 
   void toggleLoading() {
@@ -347,7 +181,11 @@ class ProfitReportBySymbol {
 
   ProfitReportBySymbol.fromJson(Map<String, dynamic> json) {
     symbol = json['_id'];
-    profit = json['profit'];
+    // profit = json['profit'];
+
+    profit = json['profit'] != null
+        ? double.tryParse(json['profit'].toString()) ?? 0.0
+        : 0.0;
   }
 
   Map<String, dynamic> toJson() {

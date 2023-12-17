@@ -1,7 +1,7 @@
 import 'package:algo_trade/app/data/models/report.models.dart';
 import 'package:algo_trade/app/modules/completed/views/completed_view.dart';
+import 'package:algo_trade/utils/constants.dart';
 import 'package:flutter/material.dart';
-
 import 'package:get/get.dart';
 
 import '../controllers/report_page_controller.dart';
@@ -75,6 +75,7 @@ class ReportItem extends StatelessWidget {
     return const TextStyle(
       fontSize: 16,
       fontWeight: FontWeight.bold,
+      // color: kProfitColor,
     );
   }
 
@@ -88,68 +89,80 @@ class ReportItem extends StatelessWidget {
           return b.profit!.compareTo(a.profit!);
         });
 
-        showBottomSheet(
-            context: context,
-            builder: (_) => Container(
-                height: Get.height * 0.6,
-                decoration: BoxDecoration(
-                  color: Get.theme.colorScheme.background,
-                  borderRadius: BorderRadius.circular(10),
+        Get.bottomSheet(
+          Container(
+            decoration: BoxDecoration(
+              color: Get.theme.colorScheme.background,
+              borderRadius:
+                  const BorderRadius.vertical(top: Radius.circular(10)),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 10,
+                    horizontal: 10,
+                  ),
+                  child: Text(
+                    "Trade Details  (${reportResponse.date})",
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18,
+                    ),
+                  ),
                 ),
-                child: Column(
-                  children: [
-                    const Padding(
-                      padding: EdgeInsets.all(8.0),
-                      child: Text("Report Details",
-                          style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                          )),
-                    ),
-                    Expanded(
-                      child: ListView.builder(
-                        itemCount: reportResponse.symbols?.length ?? 0,
-                        physics: const BouncingScrollPhysics(),
-                        padding: const EdgeInsets.only(bottom: 10),
-                        itemBuilder: (_, idx) {
-                          final symbol = reportResponse.symbols?[idx];
-                          return Card(
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Wrap(
-                                runSpacing: 10,
-                                children: [
-                                  KeyValue(
-                                    title: "symbol",
-                                    value: "${symbol?.symbol}",
-                                    valueStyle: valueStyle,
-                                  ),
-                                  KeyValue(
-                                    title: "Total Profit",
-                                    value:
-                                        "\$ ${symbol?.profit?.toStringAsFixed(2)}",
-                                    valueStyle: valueStyle,
-                                  ),
-                                  KeyValue(
-                                    title: "Trade Count",
-                                    value: "${symbol?.count}",
-                                    valueStyle: valueStyle,
-                                  ),
-                                  KeyValue(
-                                    title: "Total Investment",
-                                    value:
-                                        "\$ ${symbol?.invested?.toStringAsFixed(2)}",
-                                    valueStyle: valueStyle,
-                                  ),
-                                ],
+                Expanded(
+                  child: ListView.builder(
+                    physics: const BouncingScrollPhysics(),
+                    itemCount: reportResponse.symbols?.length ?? 0,
+                    itemBuilder: (_, idx) {
+                      final symbol = reportResponse.symbols?[idx];
+                      return Card(
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Wrap(
+                            runSpacing: 10,
+                            children: [
+                              KeyValue(
+                                title: "symbol",
+                                value: "${symbol?.symbol}",
+                                valueStyle: valueStyle,
                               ),
-                            ),
-                          );
-                        },
-                      ),
-                    ),
-                  ],
-                )));
+                              KeyValue(
+                                title: "Total Profit",
+                                value:
+                                    "\$ ${symbol?.profit?.toStringAsFixed(2)}",
+                                valueStyle: TextStyle(
+                                  fontSize: valueStyle.fontSize,
+                                  fontWeight: valueStyle.fontWeight,
+                                  color: (symbol?.profit ?? 0) >= 0
+                                      ? kProfitColor
+                                      : kLossColor,
+                                ),
+                              ),
+                              KeyValue(
+                                title: "Trade Count",
+                                value: "${symbol?.count}",
+                                valueStyle: valueStyle,
+                              ),
+                              KeyValue(
+                                title: "Total Investment",
+                                value:
+                                    "\$ ${symbol?.invested?.toStringAsFixed(2)}",
+                                valueStyle: valueStyle,
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
       },
       child: Card(
         child: Padding(

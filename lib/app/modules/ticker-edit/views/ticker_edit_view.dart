@@ -1,7 +1,6 @@
 import 'package:algo_trade/utils/constants.dart';
 import 'package:algo_trade/widgets/ticker_form.dart';
 import 'package:flutter/material.dart';
-
 import 'package:get/get.dart';
 
 import '../controllers/ticker_edit_controller.dart';
@@ -49,6 +48,7 @@ class TickerEditView extends GetView<TickerEditController> {
           buyPercentController: controller.buyPercentController,
           sellPercentController: controller.sellPercentController,
           amountController: controller.amountController,
+          openOrdersController: controller.openOrdersController,
           isLoading: controller.isLoading.value,
           loopEnabled: controller.loopEnabled.value,
           onLoopEnabledChanged: controller.onLoopEnabledChanged,

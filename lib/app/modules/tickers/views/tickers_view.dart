@@ -1,8 +1,8 @@
 import 'package:algo_trade/app/data/models/ticker.dart';
 import 'package:algo_trade/app/modules/completed/views/completed_view.dart';
 import 'package:algo_trade/app/routes/app_pages.dart';
+import 'package:algo_trade/utils/constants.dart';
 import 'package:flutter/material.dart';
-
 import 'package:get/get.dart';
 
 import '../controllers/tickers_controller.dart';
@@ -30,14 +30,24 @@ class TickersView extends GetView<TickersController> {
           ),
           child: Column(
             children: [
-              Obx(() => Text(
-                    "Tickers View (${controller.tickers.length})".toUpperCase(),
-                    style: const TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.w600,
-                      letterSpacing: 1.2,
+              Obx(
+                () => Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                      child: Text(
+                        "Tickers (${controller.tickers.length})".toUpperCase(),
+                        style: const TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.w600,
+                          letterSpacing: 1.2,
+                        ),
+                      ),
                     ),
-                  )),
+                  ],
+                ),
+              ),
               Obx(
                 () => Expanded(
                   child: RefreshIndicator(
@@ -46,12 +56,14 @@ class TickersView extends GetView<TickersController> {
                     },
                     child: Padding(
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 4.0, vertical: 8.0),
+                        horizontal: 4.0,
+                        vertical: 8.0,
+                      ),
                       child: ListView.builder(
                         physics: const BouncingScrollPhysics(),
                         itemCount: controller.tickers.length,
                         itemBuilder: (context, index) {
-                          return TickerItem(
+                          return TickerItemV1(
                             ticker: controller.tickers[index],
                           );
                         },
@@ -63,6 +75,127 @@ class TickersView extends GetView<TickersController> {
             ],
           ),
         ));
+  }
+}
+
+class MyChip extends StatelessWidget {
+  const MyChip({
+    Key? key,
+    required this.label,
+    required this.color,
+  }) : super(key: key);
+
+  final String label;
+  final Color color;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        color: color.withOpacity(0.2),
+        borderRadius: BorderRadius.circular(4),
+      ),
+      padding: const EdgeInsets.symmetric(
+        horizontal: 8,
+        vertical: 4,
+      ),
+      child: Text(
+        label,
+        style: TextStyle(
+          fontSize: 12,
+          color: color,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+    );
+  }
+}
+
+class TickerItemV1 extends StatelessWidget {
+  const TickerItemV1({
+    Key? key,
+    required this.ticker,
+  }) : super(key: key);
+
+  get titleStyle {
+    return const TextStyle(
+      fontSize: 16,
+      fontWeight: FontWeight.w500,
+      letterSpacing: 1.2,
+    );
+  }
+
+  get valueStyle {
+    return const TextStyle(
+      fontSize: 16,
+      fontWeight: FontWeight.w600,
+      letterSpacing: 1,
+    );
+  }
+
+  final BinanceTicker ticker;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        Get.toNamed(Routes.TICKER_EDIT, arguments: ticker);
+      },
+      child: Card(
+        child: Padding(
+          padding: const EdgeInsets.all(8),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    "${ticker.symbol} (${ticker.maxPendingOrders})",
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                      letterSpacing: 1,
+                      color: Colors.blue,
+                    ),
+                  ),
+                  Icon(
+                    Icons.radio_button_checked,
+                    color: (ticker.oomp ?? true) ? Colors.green : Colors.red,
+                  ),
+                ],
+              ),
+              const SizedBox(height: 10),
+              Wrap(
+                direction: Axis.horizontal,
+                spacing: 8,
+                children: [
+                  MyChip(
+                    label: "${ticker.buyPercent?.toStringAsFixed(2)} %",
+                    color: kProfitColor,
+                  ),
+                  MyChip(
+                    label: "${ticker.sellPercent?.toStringAsFixed(2)}%",
+                    color: kLossColor,
+                  ),
+                  MyChip(
+                    label: "${ticker.amount}",
+                    color: Colors.deepPurple,
+                  ),
+                ],
+              ),
+              const SizedBox(height: 4),
+              // KeyValue(
+              //   title: "Max Buy",
+              //   titleStyle: titleStyle,
+              //   valueStyle: valueStyle,
+              //   value: "${ticker.maxPendingOrders}",
+              // ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }
 
@@ -145,48 +278,6 @@ class TickerItem extends StatelessWidget {
                 titleStyle: titleStyle,
                 valueStyle: valueStyle,
               ),
-              // Row(
-              //   mainAxisAlignment: MainAxisAlignment.end,
-              //   children: [
-              //     IconButton(
-              //       onPressed: () {
-              //         Get.toNamed(Routes.TICKER_EDIT, arguments: ticker);
-              //       },
-              //       icon: const Icon(Icons.edit),
-              //       color: Colors.blue,
-              //     ),
-              //     IconButton(
-              //       onPressed: () async {
-              //         await Get.dialog<bool>(
-              //           AlertDialog(
-              //             title: const Text("Delete Ticker"),
-              //             content: const Text(
-              //                 "Are you sure you want to delete this ticker?"),
-              //             actions: [
-              //               TextButton(
-              //                 onPressed: () {
-              //                   Get.back(result: false);
-              //                 },
-              //                 child: const Text("Cancel"),
-              //               ),
-              //               TextButton(
-              //                 onPressed: () async {
-              //                   Get.back(result: true);
-              //                 },
-              //                 child: const Text("Delete"),
-              //               ),
-
-              //             ],
-              //           ),
-              //         );
-              //       },
-              //       icon: const Icon(Icons.delete),
-              //       color: Colors.red,
-              //       padding: const EdgeInsets.only(right: 0),
-              //       constraints: const BoxConstraints(),
-              //     ),
-              //   ],
-              // ),
             ],
           ),
         ),

@@ -10,6 +10,7 @@ class BinanceTicker {
   double? sellPercent;
   double? precision;
   double? amount;
+  int? maxPendingOrders;
 
   BinanceTicker({
     this.sId,
@@ -23,6 +24,7 @@ class BinanceTicker {
     this.amount,
     this.precision,
     this.oomp,
+    this.maxPendingOrders,
   });
 
   BinanceTicker.fromJson(Map<String, dynamic> json) {
@@ -39,6 +41,9 @@ class BinanceTicker {
         json['sellPercent'] != null ? json['sellPercent'].toDouble() : 0.0;
     precision = json['precision'] != null ? json['precision'].toDouble() : 0.0;
     oomp = json['oomp'];
+
+    maxPendingOrders =
+        json['maxPendingOrders'] != null ? json['maxPendingOrders'].toInt() : 0;
   }
 
   Map<String, dynamic> toJson() {

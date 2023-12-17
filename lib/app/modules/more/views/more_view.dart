@@ -34,6 +34,10 @@ class MoreView extends GetView<MoreController> {
         title: "BINANCE PAGE",
         route: Routes.BINANCE,
       ),
+      const MoreListItem(
+        title: "GP TRADES",
+        route: Routes.GROUPED_PENDING_TRADES,
+      ),
     ];
   }
 

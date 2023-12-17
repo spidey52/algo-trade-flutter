@@ -3,10 +3,9 @@ import 'package:algo_trade/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
 
 class GridOrderController extends GetxController {
-  final box = GetStorage();
+  // final box = GetStorage();
 
   final TradesProvider _apiService = TradesProvider();
 
@@ -29,26 +28,29 @@ class GridOrderController extends GetxController {
 
   final autoSuggestions = <GridOrderSuggestion>[].obs;
 
-  final callCount = 0.obs;
+  // final callCount = 0.obs;
 
   @override
   void onInit() {
     super.onInit();
 
-    ever(autoSuggestions, (callback) {
-      box.write(
-        'autoSuggestions',
-        autoSuggestions.map((e) => e.toJson()).toList(),
-      );
-    });
+    // ever(autoSuggestions, (callback) {
+    //   box.write(
+    //     'autoSuggestions',
+    //     autoSuggestions.map((e) => e.toJson()).toList(),
+    //   );
+    // });
 
-    debounce(symbol, (callback) => fillAutoSuggestions(),
-        time: 100.milliseconds);
+    // debounce(
+    //   symbol,
+    //   (callback) => fillAutoSuggestions(),
+    //   time: 100.milliseconds,
+    // );
 
-    List<dynamic> suggestions = box.read('autoSuggestions') ?? [];
+    // List<dynamic> suggestions = box.read('autoSuggestions') ?? [];
 
-    autoSuggestions.value =
-        suggestions.map((e) => GridOrderSuggestion.fromJson(e)).toList();
+    // autoSuggestions.value =
+    //     suggestions.map((e) => GridOrderSuggestion.fromJson(e)).toList();
 
     symbolController.addListener(() {
       symbol.value = symbolController.text;
@@ -123,18 +125,7 @@ class GridOrderController extends GetxController {
     }
   }
 
-  fillAutoSuggestions() {
-    int idx =
-        autoSuggestions.indexWhere((element) => element.symbol == symbol.value);
-    if (idx == -1) return;
-
-    GridOrderSuggestion suggestion = autoSuggestions[idx];
-
-    priceController.text = suggestion.price;
-    quantityController.text = suggestion.quantity;
-    countController.text = suggestion.count;
-    percentageController.text = suggestion.percentage;
-  }
+  // fillAutoSuggestions() {}
 
   void submit() {
     GridOrderSuggestion suggestion = GridOrderSuggestion(

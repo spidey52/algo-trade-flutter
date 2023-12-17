@@ -1,0 +1,18 @@
+{
+	"_id": "SOLUSDT",
+	"trades": [
+		{
+			"_id": "65741981f8bb34a689dcf016",
+			"orderId": "34606570474",
+			"symbol": "SOLUSDT",
+			"quantity": 2.0,
+			"buyPrice": 77.788,
+			"buyTime": "2023-12-09T07:38:41.845Z",
+			"createdAt": "2023-12-09T07:38:41.845Z",
+			"updatedAt": "2023-12-09T07:38:41.845Z"
+		}
+	],
+	"avgBuyPrice": 20.0,
+	"totalQty": 2.0,
+	"investment": 40.0
+}

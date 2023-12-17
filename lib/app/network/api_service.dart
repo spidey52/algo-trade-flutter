@@ -29,6 +29,10 @@ class ApiService extends GetConnect {
   Future<Response> fetchBalance() async {
     return await get("$url/binance/balance");
   }
+
+  Future<Response> fetchGroupedPendingTrades() async {
+    return await get(kGroupedPendingTrades);
+  }
 }
 
 class BinanceOrderResponse {

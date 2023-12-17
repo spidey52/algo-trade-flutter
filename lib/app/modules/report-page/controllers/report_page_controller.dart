@@ -44,6 +44,10 @@ class ReportPageController extends GetxController {
           .map((e) => ReportResponse.fromJson(e))
           .toList();
 
+      for (var element in reportResponse) {
+        element.date = element.date?.split("-").reversed.join("-");
+      }
+
       Fluttertoast.showToast(msg: 'Report fetched successfully');
     } catch (e) {
       Fluttertoast.showToast(msg: e.toString());
