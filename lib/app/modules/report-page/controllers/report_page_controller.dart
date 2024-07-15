@@ -7,8 +7,11 @@ import 'package:get/get.dart';
 class ReportPageController extends GetxController {
   final TradesProvider tradesProvider = TradesProvider();
 
-  RxList<ReportResponse> reportResponse = <ReportResponse>[].obs;
+  final RxList<ReportResponse> reportResponse = <ReportResponse>[].obs;
   final daysCount = 0.obs;
+
+  final RxString frequency = 'daily'.obs;
+  final RxList<String> frequencies = ['daily', 'monthly', 'yearly'].obs;
 
   RxInt count = 0.obs;
 
@@ -24,6 +27,10 @@ class ReportPageController extends GetxController {
       daysCount.value = totalDays.inDays;
     });
 
+    ever(frequency, (callback) {
+      fetchReports();
+    });
+
     super.onInit();
   }
 
@@ -31,14 +38,13 @@ class ReportPageController extends GetxController {
     try {
       final response =
           await tradesProvider.get('$kTradeList/profit-category', query: {
-        "frequency": "daily",
+        "frequency": frequency.value,
       });
 
-      // if (response.status != 200) {
-      //   print(response.body);
-      //   Fluttertoast.showToast(msg: 'Error fetching report');
-      //   return;
-      // }
+      if (response.statusCode != 200) {
+        Fluttertoast.showToast(msg: 'Error fetching report');
+        return;
+      }
 
       reportResponse.value = (response.body as List)
           .map((e) => ReportResponse.fromJson(e))

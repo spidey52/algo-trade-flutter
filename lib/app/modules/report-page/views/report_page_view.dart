@@ -12,7 +12,7 @@ class ReportPageView extends GetView<ReportPageController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('ReportPageView'),
+        title: const Text('Reports'),
         centerTitle: true,
       ),
       body: Column(
@@ -21,17 +21,68 @@ class ReportPageView extends GetView<ReportPageController> {
           Padding(
             padding: const EdgeInsets.symmetric(
               horizontal: 10,
-              vertical: 10,
+              // vertical: 10,
             ),
-            child: Obx(
-              () => Text(
-                'Profit Reports ( ${controller.daysCount.value} )',
-                style: const TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
+
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Text(
+                  'Profit Reports',
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
-              ),
+
+                DropdownButtonHideUnderline(
+                  child: Obx(() => DropdownButton<String>(
+                        value: null,
+                        icon: const Icon(
+                          Icons.filter_list,
+                        ),
+                        iconSize: 24,
+                        isDense: true,
+                        menuMaxHeight: 300,
+                        hint: const Text(""),
+                        onChanged: (val) {
+                          if (val != null) {
+                            controller.frequency.value = val;
+                          }
+                        },
+                        items: (controller.frequencies)
+                            .map<DropdownMenuItem<String>>((String value) {
+                          return DropdownMenuItem<String>(
+                            value: value,
+                            child: Text(
+                              value,
+                              style: TextStyle(
+                                color: controller.frequency.value == value
+                                    ? Colors.blue
+                                    : Colors.black,
+                              ),
+                            ),
+                          );
+                        }).toList(),
+                      )),
+                )
+
+                // IconButton(
+                //   onPressed: () {},
+                //   icon: const Icon(Icons.arrow_forward_ios),
+                // ),
+              ],
             ),
+
+            // child: Obx(
+            //   () => Text(
+            //     'Profit Reports ( ${controller.daysCount.value} )',
+            //     style: const TextStyle(
+            //       fontSize: 20,
+            //       fontWeight: FontWeight.bold,
+            //     ),
+            //   ),
+            // ),
           ),
           Obx(
             () => Expanded(

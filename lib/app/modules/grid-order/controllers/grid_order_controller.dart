@@ -1,4 +1,5 @@
 import 'package:algo_trade/app/network/trade_provider.dart';
+import 'package:algo_trade/main.dart';
 import 'package:algo_trade/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -8,10 +9,13 @@ class GridOrderController extends GetxController {
   // final box = GetStorage();
 
   final TradesProvider _apiService = TradesProvider();
+  final PriceController tickerController = Get.find<PriceController>();
 
   final isLoading = false.obs;
   final market = 'FUTURE'.obs;
   final side = 'BUY'.obs;
+
+  final selectedSymbol = "".obs;
 
   final TextEditingController symbolController = TextEditingController();
   final TextEditingController priceController = TextEditingController();
@@ -26,31 +30,22 @@ class GridOrderController extends GetxController {
   final percentage = "".obs;
   final skipOne = false.obs;
 
-  final autoSuggestions = <GridOrderSuggestion>[].obs;
-
-  // final callCount = 0.obs;
-
   @override
   void onInit() {
     super.onInit();
 
-    // ever(autoSuggestions, (callback) {
-    //   box.write(
-    //     'autoSuggestions',
-    //     autoSuggestions.map((e) => e.toJson()).toList(),
-    //   );
-    // });
+    ever(selectedSymbol, (callback) {
+      if (callback == "ALL") return;
+      symbolController.text = callback;
 
-    // debounce(
-    //   symbol,
-    //   (callback) => fillAutoSuggestions(),
-    //   time: 100.milliseconds,
-    // );
+      final ticker = tickerController.getTicker(callback);
+      priceController.text = ticker.price.toString();
 
-    // List<dynamic> suggestions = box.read('autoSuggestions') ?? [];
-
-    // autoSuggestions.value =
-    //     suggestions.map((e) => GridOrderSuggestion.fromJson(e)).toList();
+      quantityController.text = ticker.amount.toString();
+      countController.text = ticker.maxPendingOrders.toString();
+      percentageController.text = ticker.buyPercent.toString();
+      priceController.text = ticker.price.toString();
+    });
 
     symbolController.addListener(() {
       symbol.value = symbolController.text;
@@ -85,8 +80,6 @@ class GridOrderController extends GetxController {
   }
 
   void submitRequest() async {
-    submit();
-
     if (symbol.isEmpty || price.isEmpty || quantity.isEmpty || count.isEmpty) {
       Get.snackbar(
         "Error",
@@ -126,59 +119,4 @@ class GridOrderController extends GetxController {
   }
 
   // fillAutoSuggestions() {}
-
-  void submit() {
-    GridOrderSuggestion suggestion = GridOrderSuggestion(
-      symbol: symbol.value,
-      price: price.value,
-      quantity: quantity.value,
-      count: count.value,
-      percentage: percentage.value,
-    );
-
-    int index =
-        autoSuggestions.indexWhere((element) => element.symbol == symbol.value);
-
-    if (index != -1) {
-      autoSuggestions.removeAt(index);
-    }
-
-    autoSuggestions.insert(0, suggestion);
-  }
-}
-
-class GridOrderSuggestion {
-  final String symbol;
-  final String price;
-  final String quantity;
-  final String count;
-  final String percentage;
-
-  GridOrderSuggestion({
-    required this.symbol,
-    required this.price,
-    required this.quantity,
-    required this.count,
-    required this.percentage,
-  });
-
-  factory GridOrderSuggestion.fromJson(Map<String, dynamic> json) {
-    return GridOrderSuggestion(
-      symbol: json['symbol'],
-      price: json['price'],
-      quantity: json['quantity'],
-      count: json['count'],
-      percentage: json['percentage'],
-    );
-  }
-
-  Map<String, dynamic> toJson() {
-    return {
-      'symbol': symbol,
-      'price': price,
-      'quantity': quantity,
-      'count': count,
-      'percentage': percentage,
-    };
-  }
 }

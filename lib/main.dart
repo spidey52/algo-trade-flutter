@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:algo_trade/app/data/models/binance_stream.dart';
+import 'package:algo_trade/app/data/models/ticker.dart';
 import 'package:algo_trade/app/network/trade_provider.dart';
 import 'package:algo_trade/firebase/firebase_init.dart';
 import 'package:algo_trade/utils/constants.dart';
@@ -13,7 +14,8 @@ import 'package:web_socket_channel/web_socket_channel.dart';
 
 import 'app/routes/app_pages.dart';
 
-final wsUrl = Uri.parse('wss://stream.binance.com:9443/ws/!miniTicker@arr');
+final wsUrl = Uri.parse('wss://glm1.spideyworld.co.in/crypto-stream');
+// final wsUrl = Uri.parse('ws://172.30.2.35:8080/crypto-stream');
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -45,6 +47,7 @@ void main() async {
 class PriceController extends GetxController {
   final RxBool isProfitVisible = false.obs;
   final RxList<String> tickers = <String>[].obs;
+  final RxList<BinanceTicker> binanceTickers = <BinanceTicker>[].obs;
 
   final TradesProvider tradesProvider = TradesProvider();
 
@@ -52,6 +55,16 @@ class PriceController extends GetxController {
       <String, BinanceStream>{}.obs;
 
   late WebSocketChannel channel;
+
+  BinanceTicker getTicker(String symbol) {
+    final ticker = binanceTickers.firstWhere(
+        (element) => element.symbol == symbol,
+        orElse: () => BinanceTicker());
+
+    ticker.price = tickerStreamMap[symbol]?.price ?? 0.0;
+
+    return ticker;
+  }
 
   Future<void> fetchTickers() async {
     try {
@@ -63,9 +76,13 @@ class PriceController extends GetxController {
       if (response.statusCode == 200) {
         var tickerBody = response.body as List;
         tickers.value = tickerBody.map((e) => e['symbol'].toString()).toList();
+
+        binanceTickers.value = tickerBody
+            .map((e) => BinanceTicker.fromJson(e as Map<String, dynamic>))
+            .toList();
+
         tickers.sort(((a, b) => a.compareTo(b)));
         tickers.insert(0, "All");
-        showToast('Tickers loaded');
       } else {
         showToast(response.body['message']);
       }
@@ -77,35 +94,53 @@ class PriceController extends GetxController {
 
   void connect() async {
     try {
+      if (tickers.isEmpty) {
+        await fetchTickers();
+      }
       channel = WebSocketChannel.connect(wsUrl);
       Fluttertoast.showToast(msg: "Socket connected");
 
+      final payload = jsonEncode(tickers.map((e) => e.toString()).toList());
+      channel.sink.add(payload);
+
       channel.stream.listen(
         (event) {
-          var streamjson = jsonDecode(event) as List;
-          for (var element in streamjson) {
-            final price = element['c'];
-            final symbol = element['s'];
-            final exist = tickerStreamMap[symbol];
+          // print(event);
 
-            if (exist != null) {
-              exist.prevPrice = exist.price;
-              exist.price = double.tryParse(price) ?? 0.0;
+          try {
+            final eventData = jsonDecode(event) as Map<String, dynamic>;
+            final tickersData = eventData['tickers'] as List;
+            // print(tickersData);
+            for (var element in tickersData) {
+              final symbol = element['ticker'];
+              final price = element['price'];
+              final exist = tickerStreamMap[symbol];
 
-              tickerStreamMap.update(
-                symbol,
-                (value) => BinanceStream(
-                  symbol: symbol,
-                  price: exist.price,
-                  prevPrice: exist.prevPrice,
-                ),
-              );
-            } else {
-              tickerStreamMap.putIfAbsent(
-                symbol,
-                () => BinanceStream.fromJson(element),
-              );
+              if (exist != null) {
+                exist.prevPrice = exist.price;
+                exist.price = double.tryParse("$price") ?? 0.0;
+
+                tickerStreamMap.update(
+                  symbol,
+                  (value) => BinanceStream(
+                    symbol: symbol,
+                    price: exist.price,
+                    prevPrice: exist.prevPrice,
+                  ),
+                );
+              } else {
+                tickerStreamMap.putIfAbsent(
+                  symbol,
+                  () => BinanceStream(
+                      symbol: symbol,
+                      // price: double.tryParse(price) ?? 0.0,
+                      price: 0.0,
+                      prevPrice: 0.0),
+                );
+              }
             }
+          } catch (e) {
+            Fluttertoast.showToast(msg: e.toString());
           }
         },
       );
@@ -122,9 +157,7 @@ class PriceController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    showToast("price controller init");
     connect();
-    fetchTickers();
   }
 }
 

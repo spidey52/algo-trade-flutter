@@ -1,3 +1,4 @@
+import 'package:algo_trade/main.dart';
 import 'package:algo_trade/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -18,7 +19,15 @@ class GridOrderView extends GetView<GridOrderController> {
         child: Wrap(
           runSpacing: 20,
           children: [
-            Text("${loggedInUser.toUpperCase()}"),
+            Row(children: [
+              const Text("Logged in as: "),
+              Text("${loggedInUser.toUpperCase()}"),
+              Obx(() => TickerSelector(
+                  selected: controller.selectedSymbol.value,
+                  onChanged: (val) {
+                    controller.selectedSymbol.value = val;
+                  }))
+            ]),
 
             OutlinedTextField(
               hint: "Symbol",

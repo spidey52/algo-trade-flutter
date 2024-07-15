@@ -3,21 +3,20 @@ class BinanceTicker {
   String? symbol;
   String? createdAt;
   String? updatedAt;
-  int? iV;
-  double? buyPercent;
+  num? buyPercent;
   bool? loopEnabled;
   bool? oomp;
-  double? sellPercent;
-  double? precision;
-  double? amount;
-  int? maxPendingOrders;
+  num? sellPercent;
+  num? precision;
+  num? amount;
+  num? maxPendingOrders;
+  num? price;
 
   BinanceTicker({
     this.sId,
     this.symbol,
     this.createdAt,
     this.updatedAt,
-    this.iV,
     this.buyPercent,
     this.loopEnabled,
     this.sellPercent,
@@ -32,7 +31,6 @@ class BinanceTicker {
     symbol = json['symbol'];
     createdAt = json['createdAt'];
     updatedAt = json['updatedAt'];
-    iV = json['__v'];
     amount = json['amount'] != null ? json['amount'].toDouble() : 0.0;
     buyPercent =
         json['buyPercent'] != null ? json['buyPercent'].toDouble() : 0.0;
@@ -52,7 +50,6 @@ class BinanceTicker {
     data['symbol'] = symbol;
     data['createdAt'] = createdAt;
     data['updatedAt'] = updatedAt;
-    data['__v'] = iV;
     data['amount'] = amount;
     data['buyPercent'] = buyPercent;
     data['loopEnabled'] = loopEnabled;
