@@ -166,9 +166,11 @@ class TickerSelector extends GetView<PriceController> {
     Key? key,
     required this.selected,
     required this.onChanged,
+    this.value = false,
   }) : super(key: key);
 
   final String selected;
+  final bool value;
   final Function(String) onChanged;
 
   Color textColor(String value) {
@@ -180,7 +182,7 @@ class TickerSelector extends GetView<PriceController> {
   Widget build(BuildContext context) {
     return DropdownButtonHideUnderline(
       child: Obx(() => DropdownButton<String>(
-            value: null,
+            value: value ? selected : null,
             icon: Icon(
               Icons.filter_list,
               color: selected != "" ? Colors.blue : Colors.black,

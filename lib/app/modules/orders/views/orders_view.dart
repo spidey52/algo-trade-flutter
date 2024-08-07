@@ -1,10 +1,9 @@
 import 'package:algo_trade/app/modules/completed/views/completed_view.dart';
 import 'package:algo_trade/app/network/api_service.dart';
+import 'package:algo_trade/main.dart';
 import 'package:algo_trade/utils/constants.dart';
 import 'package:algo_trade/widgets/my_chip.dart';
-import 'package:algo_trade/widgets/search.dart';
 import 'package:flutter/material.dart';
-
 import 'package:get/get.dart';
 
 import '../controllers/orders_controller.dart';
@@ -16,7 +15,16 @@ class OrdersView extends GetView<OrdersController> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('OrdersView'),
-        centerTitle: true,
+        actions: [
+          Obx(() => TickerSelector(
+                value: true,
+                selected: controller.search.value,
+                onChanged: (val) {
+                  controller.search.value = val;
+                },
+              )),
+          const SizedBox(width: 10),
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -52,12 +60,13 @@ class OrdersView extends GetView<OrdersController> {
                 ],
               ),
             ),
-            SearchField(
-              defaultValue: controller.search.value,
-              onChanged: (val) {
-                controller.search.value = val;
-              },
-            ),
+
+            // SearchField(
+            //   defaultValue: controller.search.value,
+            //   onChanged: (val) {
+            //     controller.search.value = val;
+            //   },
+            // ),
             Obx(
               () => Padding(
                 padding: const EdgeInsets.symmetric(

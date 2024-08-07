@@ -60,7 +60,8 @@ class TickersView extends GetView<TickersController> {
                         vertical: 8.0,
                       ),
                       child: ListView.builder(
-                        physics: const BouncingScrollPhysics(),
+                        physics: const BouncingScrollPhysics(
+                            parent: AlwaysScrollableScrollPhysics()),
                         itemCount: controller.tickers.length,
                         itemBuilder: (context, index) {
                           return TickerItemV1(

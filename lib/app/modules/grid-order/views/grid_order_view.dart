@@ -19,9 +19,8 @@ class GridOrderView extends GetView<GridOrderController> {
         child: Wrap(
           runSpacing: 20,
           children: [
-            Row(children: [
-              const Text("Logged in as: "),
-              Text("${loggedInUser.toUpperCase()}"),
+            Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+              Text("Logged in as:  ${loggedInUser.toUpperCase()}"),
               Obx(() => TickerSelector(
                   selected: controller.selectedSymbol.value,
                   onChanged: (val) {
@@ -37,18 +36,22 @@ class GridOrderView extends GetView<GridOrderController> {
             OutlinedTextField(
               hint: "count",
               controller: controller.countController,
+              keyboardType: TextInputType.number,
             ),
             OutlinedTextField(
               hint: "price",
               controller: controller.priceController,
+              keyboardType: TextInputType.number,
             ),
             OutlinedTextField(
               hint: "quantity",
               controller: controller.quantityController,
+              keyboardType: TextInputType.number,
             ),
             OutlinedTextField(
               hint: "percentage",
               controller: controller.percentageController,
+              keyboardType: TextInputType.number,
             ),
             Obx(
               () => Row(
@@ -131,16 +134,19 @@ class OutlinedTextField extends StatelessWidget {
     required this.hint,
     required this.controller,
     this.onEditingComplete,
+    this.keyboardType = TextInputType.text,
   });
 
   final String hint;
   final TextEditingController controller;
   final Function()? onEditingComplete;
+  final TextInputType keyboardType;
 
   @override
   Widget build(BuildContext context) {
     return TextField(
       controller: controller,
+      keyboardType: keyboardType,
       decoration: InputDecoration(
         contentPadding: const EdgeInsets.symmetric(
           vertical: 10,

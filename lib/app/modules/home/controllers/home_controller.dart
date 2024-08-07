@@ -104,6 +104,12 @@ class HomeController extends GetxController {
                       e.buyPrice,
                 ))
             .toList();
+
+        trades.sort((a, b) {
+          final aProfit = (a.ltp - a.buyPrice) * a.quantity;
+          final bProfit = (b.ltp - b.buyPrice) * b.quantity;
+          return bProfit.compareTo(aProfit);
+        });
       } else {
         trades.value = tradeBody.map((e) => Trade.fromJson(e)).toList();
       }
