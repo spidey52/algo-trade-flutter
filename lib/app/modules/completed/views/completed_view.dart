@@ -1,8 +1,10 @@
-import 'package:algo_trade/app/data/models/future_trade.dart';
-import 'package:algo_trade/main.dart';
 import 'package:flutter/material.dart';
+
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+
+import 'package:algo_trade/app/data/models/future_trade.dart';
+import 'package:algo_trade/main.dart';
 
 import '../controllers/completed_controller.dart';
 

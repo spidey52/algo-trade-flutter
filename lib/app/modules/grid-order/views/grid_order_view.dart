@@ -1,7 +1,9 @@
+import 'package:flutter/material.dart';
+
+import 'package:get/get.dart';
+
 import 'package:algo_trade/main.dart';
 import 'package:algo_trade/utils/constants.dart';
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
 import '../controllers/grid_order_controller.dart';
 
@@ -41,17 +43,20 @@ class GridOrderView extends GetView<GridOrderController> {
             OutlinedTextField(
               hint: "price",
               controller: controller.priceController,
-              keyboardType: TextInputType.number,
+              keyboardType:
+                  const TextInputType.numberWithOptions(decimal: true),
             ),
             OutlinedTextField(
               hint: "quantity",
               controller: controller.quantityController,
-              keyboardType: TextInputType.number,
+              keyboardType:
+                  const TextInputType.numberWithOptions(decimal: true),
             ),
             OutlinedTextField(
               hint: "percentage",
               controller: controller.percentageController,
-              keyboardType: TextInputType.number,
+              keyboardType:
+                  const TextInputType.numberWithOptions(decimal: true),
             ),
             Obx(
               () => Row(
@@ -147,6 +152,9 @@ class OutlinedTextField extends StatelessWidget {
     return TextField(
       controller: controller,
       keyboardType: keyboardType,
+      onTapOutside: (event) {
+        FocusScope.of(context).unfocus();
+      },
       decoration: InputDecoration(
         contentPadding: const EdgeInsets.symmetric(
           vertical: 10,

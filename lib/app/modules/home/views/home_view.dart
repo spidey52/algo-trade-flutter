@@ -1,5 +1,10 @@
+import 'package:flutter/material.dart';
+
+import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
+import 'package:pie_chart/pie_chart.dart';
+
 import 'package:algo_trade/app/data/models/binance_stream.dart';
-import 'package:algo_trade/app/data/models/dashboard_card.dart';
 import 'package:algo_trade/app/modules/completed/views/completed_view.dart';
 import 'package:algo_trade/app/modules/grid-order/views/grid_order_view.dart';
 import 'package:algo_trade/app/modules/home/views/profit_view.dart';
@@ -8,10 +13,6 @@ import 'package:algo_trade/app/modules/more/views/more_view.dart';
 import 'package:algo_trade/app/routes/app_pages.dart';
 import 'package:algo_trade/main.dart';
 import 'package:algo_trade/utils/constants.dart';
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
-import 'package:pie_chart/pie_chart.dart';
 
 import '../controllers/home_controller.dart';
 
@@ -87,23 +88,6 @@ class HomeView extends GetView<HomeController> {
                               title: Text(e),
                             );
                           }).toList(),
-
-                          // ListTile(
-                          //   onTap: () {
-                          //     controller.market.value = "FUTURE";
-                          //     box.write('market', "FUTURE");
-                          //     Get.back();
-                          //   },
-                          //   title: const Text("FUTURE"),
-                          // ),
-                          // ListTile(
-                          //   onTap: () {
-                          //     controller.market.value = "SPOT";
-                          //     box.write('market', "SPOT");
-                          //     Get.back();
-                          //   },
-                          //   title: const Text("SPOT"),
-                          // ),
                         ],
                       ),
                     );
@@ -126,16 +110,6 @@ class HomeView extends GetView<HomeController> {
               Get.isDarkMode ? Icons.dark_mode : Icons.light_mode,
             ),
           ),
-          // Obx(
-          //   () => IconButton(
-          //     onPressed: () {
-          //       controller.toggleUrl();
-          //     },
-          //     icon: controller.url.value == "http://52.66.39.113:9001"
-          //         ? const Icon(Icons.cloud_off)
-          //         : const Icon(Icons.cloud),
-          //   ),
-          // ),
         ],
       ),
       body: Obx(
@@ -172,9 +146,23 @@ class HomePage extends StatelessWidget {
             const SizedBox(height: 10),
             Obx(
               () => ScrollCard(
-                  cardResult: controller.dashboardCard.value.result ?? []),
+                  cardResult:
+                      (controller.dashboardCard.value.result ?? []).map((e) {
+                return TitleAmount(e.title ?? "", e.profit ?? 0.0);
+              }).toList()),
             ),
-            ProfityBySymbol(controller: controller),
+            // controller.priceController.isProfitVisible.value
+            //     ? ProfityBySymbol(controller: controller)
+            //     : const SizedBox(),
+            // const SizedBox(height: 5),
+
+            // Obx(
+            //   () => ScrollCard(
+            //     cardResult: controller.pieData.map((e) {
+            //       return TitleAmount(e.symbol ?? "", e.profit ?? 0.0);
+            //     }).toList(),
+            //   ),
+            // ),
             Padding(
               padding: const EdgeInsets.symmetric(
                 horizontal: 8.0,
@@ -216,14 +204,16 @@ class HomePage extends StatelessWidget {
                     child: ListView.builder(
                       itemCount: controller.trades.length,
                       physics: const BouncingScrollPhysics(),
+                      padding: const EdgeInsets.only(bottom: 200),
                       itemBuilder: (context, idx) {
-                        return Obx(() => TradeItem(
-                              trade: controller.trades[idx],
-                              ticker:
-                                  controller.priceController.tickerStreamMap[
-                                          controller.trades[idx].symbol] ??
-                                      BinanceStream(),
-                            ));
+                        return Obx(
+                          () => TradeItem(
+                            trade: controller.trades[idx],
+                            ticker: controller.priceController.tickerStreamMap[
+                                    controller.trades[idx].symbol] ??
+                                BinanceStream(),
+                          ),
+                        );
                       },
                     ),
                   ),
@@ -272,13 +262,20 @@ class ProfityBySymbol extends StatelessWidget {
   }
 }
 
+class TitleAmount {
+  final String title;
+  final num amount;
+
+  TitleAmount(this.title, this.amount);
+}
+
 class ScrollCard extends StatelessWidget {
   const ScrollCard({
     super.key,
     required this.cardResult,
   });
 
-  final List<CardResult> cardResult;
+  final List<TitleAmount> cardResult;
 
   @override
   Widget build(BuildContext context) {
@@ -294,8 +291,8 @@ class ScrollCard extends StatelessWidget {
                   (e) => SizedBox(
                     width: 200,
                     child: ProfitView(
-                      title: e.title ?? "",
-                      amount: (e.profit ?? 0.0).toStringAsFixed(2),
+                      title: e.title,
+                      amount: (e.amount).toStringAsFixed(2),
                     ),
                   ),
                 )

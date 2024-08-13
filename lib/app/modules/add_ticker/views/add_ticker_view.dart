@@ -1,6 +1,8 @@
-import 'package:algo_trade/widgets/ticker_form.dart';
 import 'package:flutter/material.dart';
+
 import 'package:get/get.dart';
+
+import 'package:algo_trade/widgets/ticker_form.dart';
 
 import '../controllers/add_ticker_controller.dart';
 

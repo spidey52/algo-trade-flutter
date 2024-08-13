@@ -1,8 +1,10 @@
+import 'package:flutter/material.dart';
+
+import 'package:get/get.dart';
+
 import 'package:algo_trade/app/data/models/ticker.dart';
 import 'package:algo_trade/app/network/trade_provider.dart';
 import 'package:algo_trade/utils/constants.dart';
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
 class TickerEditController extends GetxController {
   late BinanceTicker _binanceTicker;

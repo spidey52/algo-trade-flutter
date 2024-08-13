@@ -1,7 +1,8 @@
-import 'package:algo_trade/app/routes/app_pages.dart';
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
+
+import 'package:algo_trade/app/routes/app_pages.dart';
 
 import '../controllers/more_controller.dart';
 

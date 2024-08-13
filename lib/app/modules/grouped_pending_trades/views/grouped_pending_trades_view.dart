@@ -1,7 +1,9 @@
+import 'package:flutter/material.dart';
+
+import 'package:get/get.dart';
+
 import 'package:algo_trade/app/data/models/binance_stream.dart';
 import 'package:algo_trade/utils/constants.dart';
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
 import '../controllers/grouped_pending_trades_controller.dart';
 

@@ -39,7 +39,6 @@ class CheckLiquidationView extends GetView<CheckLiquidationController> {
   }
 }
 
-
 /*
 already coin, current price, 
 

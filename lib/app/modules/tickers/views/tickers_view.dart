@@ -1,9 +1,11 @@
+import 'package:flutter/material.dart';
+
+import 'package:get/get.dart';
+
 import 'package:algo_trade/app/data/models/ticker.dart';
 import 'package:algo_trade/app/modules/completed/views/completed_view.dart';
 import 'package:algo_trade/app/routes/app_pages.dart';
 import 'package:algo_trade/utils/constants.dart';
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
 import '../controllers/tickers_controller.dart';
 

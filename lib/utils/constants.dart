@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
@@ -15,13 +16,13 @@ const users = {
   "gcs": "https://binance-spot-trade.spideyworld.co.in",
   "satyam": "https://satyam-algo-trade.spideyworld.co.in",
   // "gcs": "http://13.127.1.63:9001",
-  // "amit": "http://3.109.94.54:9001",
+  "amit": "http://3.109.94.54:9001",
   // "sudhanshu": "http://13.235.211.38:9001"
 };
 
 get loggedInUser {
   final box = GetStorage();
-  return box.read(kLoggedInUser) ?? 'sudhanshu';
+  return box.read(kLoggedInUser) ?? 'satyam';
 }
 
 get availableUsers => users.keys.toList();

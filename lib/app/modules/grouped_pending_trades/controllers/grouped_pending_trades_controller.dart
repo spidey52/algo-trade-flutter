@@ -1,10 +1,11 @@
 import 'dart:async';
 
+import 'package:get/get.dart';
+
 import 'package:algo_trade/app/data/models/grouped_pending.dart';
 import 'package:algo_trade/app/network/api_service.dart';
 import 'package:algo_trade/main.dart';
 import 'package:algo_trade/utils/constants.dart';
-import 'package:get/get.dart';
 
 class GroupedPendingTradesController extends GetxController {
   final apiProvider = ApiService();

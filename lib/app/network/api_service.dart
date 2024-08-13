@@ -1,6 +1,7 @@
-import 'package:algo_trade/utils/constants.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+
+import 'package:algo_trade/utils/constants.dart';
 
 class ApiService extends GetConnect {
   final box = GetStorage();

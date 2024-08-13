@@ -1,8 +1,10 @@
+import 'package:flutter/material.dart';
+
+import 'package:get/get.dart';
+
 import 'package:algo_trade/app/data/models/report.models.dart';
 import 'package:algo_trade/app/modules/completed/views/completed_view.dart';
 import 'package:algo_trade/utils/constants.dart';
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
 import '../controllers/report_page_controller.dart';
 

@@ -1,8 +1,10 @@
+import 'package:flutter/material.dart';
+
+import 'package:get/get.dart';
+
 import 'package:algo_trade/app/data/models/binance_balance.dart';
 import 'package:algo_trade/utils/constants.dart';
 import 'package:algo_trade/widgets/refresh_icon.dart';
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
 import '../controllers/binance_controller.dart';
 
@@ -90,10 +92,10 @@ class PositionItem extends StatelessWidget {
 
   final Positions e;
 
-  double get entryPrice => e.entryPrice ?? 0;
-  double get unrealizedProfit => e.unrealizedProfit ?? 0.0;
+  num get entryPrice => e.entryPrice ?? 0;
+  num get unrealizedProfit => e.unrealizedProfit ?? 0.0;
 
-  double get profitPercent => unrealizedProfit / investedAmount * 100;
+  num get profitPercent => unrealizedProfit / investedAmount * 100;
 
   double get notionalValue {
     final askPrice = double.parse(e.askNotional ?? '0.0');
@@ -102,7 +104,7 @@ class PositionItem extends StatelessWidget {
     return notional * askPrice;
   }
 
-  double get investedAmount {
+  num get investedAmount {
     final entryPrice = e.entryPrice ?? 0.0;
     final positionAmt = e.positionAmt ?? 0.0;
     final total = entryPrice * positionAmt;
@@ -131,7 +133,7 @@ class PositionItem extends StatelessWidget {
                   children: [
                     Text("Qty. ${e.positionAmt}"),
                     const SizedBox(width: 2),
-                    Text("Avg. ${entryPrice.toPrecision(2)}")
+                    Text("Avg. ${entryPrice.toDouble().toPrecision(2)}")
                   ],
                 ),
                 Text(

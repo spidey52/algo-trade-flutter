@@ -1,10 +1,11 @@
 import 'dart:async';
 
+import 'package:get/get.dart';
+
 import 'package:algo_trade/app/data/models/binance_balance.dart';
 import 'package:algo_trade/app/network/api_service.dart';
 import 'package:algo_trade/main.dart';
 import 'package:algo_trade/utils/constants.dart';
-import 'package:get/get.dart';
 
 class BinanceController extends GetxController {
   final apiProvider = ApiService();

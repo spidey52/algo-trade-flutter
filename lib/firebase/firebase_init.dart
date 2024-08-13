@@ -1,6 +1,7 @@
-import 'package:algo_trade/utils/constants.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+
+import 'package:algo_trade/utils/constants.dart';
 
 Future<void> backgroundHandler(RemoteMessage message) async {
   print(message.data.toString());

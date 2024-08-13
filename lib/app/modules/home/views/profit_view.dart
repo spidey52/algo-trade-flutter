@@ -1,8 +1,10 @@
+import 'package:flutter/material.dart';
+
+import 'package:get/get.dart';
+
 import 'package:algo_trade/app/modules/home/controllers/home_controller.dart';
 import 'package:algo_trade/app/routes/app_pages.dart';
 import 'package:algo_trade/utils/constants.dart';
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
 class ProfitView extends StatelessWidget {
   ProfitView({Key? key, required this.title, required this.amount})

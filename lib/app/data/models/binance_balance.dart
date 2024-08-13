@@ -267,18 +267,18 @@ class Assets {
 
 class Positions {
   String? symbol;
-  double? initialMargin;
-  double? maintMargin;
-  double? unrealizedProfit;
-  double? positionInitialMargin;
-  double? openOrderInitialMargin;
-  double? leverage;
+  num? initialMargin;
+  num? maintMargin;
+  num? unrealizedProfit;
+  num? positionInitialMargin;
+  num? openOrderInitialMargin;
+  num? leverage;
   bool? isolated;
-  double? entryPrice;
-  double? breakEvenPrice;
+  num? entryPrice;
+  num? breakEvenPrice;
   String? maxNotional;
   String? positionSide;
-  double? positionAmt;
+  num? positionAmt;
   String? notional;
   String? isolatedWallet;
   String? updateTime;
@@ -307,20 +307,20 @@ class Positions {
 
   Positions.fromJson(Map<String, dynamic> json) {
     symbol = json['symbol'];
-    initialMargin = double.tryParse(json['initialMargin'].toString());
-    maintMargin = double.tryParse(json['maintMargin'].toString());
-    unrealizedProfit = double.tryParse(json['unrealizedProfit'].toString());
+    initialMargin = num.tryParse(json['initialMargin'].toString());
+    maintMargin = num.tryParse(json['maintMargin'].toString());
+    unrealizedProfit = num.tryParse(json['unrealizedProfit'].toString());
     positionInitialMargin =
-        double.tryParse(json['positionInitialMargin'].toString());
+        num.tryParse(json['positionInitialMargin'].toString());
     openOrderInitialMargin =
-        double.tryParse(json['openOrderInitialMargin'].toString());
-    leverage = double.tryParse(json['leverage'].toString());
+        num.tryParse(json['openOrderInitialMargin'].toString());
+    leverage = num.tryParse(json['leverage'].toString());
     isolated = json['isolated'];
-    entryPrice = double.tryParse(json['entryPrice'].toString());
-    breakEvenPrice = double.tryParse(json['breakEvenPrice'].toString());
+    entryPrice = num.tryParse(json['entryPrice'].toString());
+    breakEvenPrice = num.tryParse(json['breakEvenPrice'].toString());
     maxNotional = json['maxNotional'];
     positionSide = json['positionSide'];
-    positionAmt = double.tryParse(json['positionAmt'].toString());
+    positionAmt = num.tryParse(json['positionAmt'].toString());
     notional = json['notional'];
     isolatedWallet = json['isolatedWallet'];
     updateTime = json['updateTime'];
@@ -353,16 +353,16 @@ class Positions {
 }
 
 class BTC {
-  double? free;
-  double? used;
-  double? total;
+  num? free;
+  num? used;
+  num? total;
 
   BTC({this.free, this.used, this.total});
 
   BTC.fromJson(Map<String, dynamic> json) {
-    free = double.tryParse(json['free'].toString());
-    used = double.tryParse(json['used'].toString());
-    total = double.tryParse(json['total'].toString());
+    free = num.tryParse(json['free'].toString());
+    used = num.tryParse(json['used'].toString());
+    total = num.tryParse(json['total'].toString());
   }
 
   Map<String, dynamic> toJson() {
@@ -375,16 +375,16 @@ class BTC {
 }
 
 class BNB {
-  double? free;
-  double? used;
-  double? total;
+  num? free;
+  num? used;
+  num? total;
 
   BNB({this.free, this.used, this.total});
 
   BNB.fromJson(Map<String, dynamic> json) {
-    free = double.tryParse(json['free'].toString());
-    used = double.tryParse(json['used'].toString());
-    total = double.tryParse(json['total'].toString());
+    free = num.tryParse(json['free'].toString());
+    used = num.tryParse(json['used'].toString());
+    total = num.tryParse(json['total'].toString());
   }
 
   Map<String, dynamic> toJson() {
@@ -397,9 +397,9 @@ class BNB {
 }
 
 class USDT {
-  double? free;
-  double? used;
-  double? total;
+  num? free;
+  num? used;
+  num? total;
 
   USDT({this.free, this.used, this.total});
 
@@ -419,15 +419,15 @@ class USDT {
 }
 
 class Free {
-  double? bTC;
-  double? xRP;
-  double? tUSD;
-  double? bNB;
-  double? eTH;
-  double? uSDT;
-  double? uSDP;
-  double? uSDC;
-  double? bUSD;
+  num? bTC;
+  num? xRP;
+  num? tUSD;
+  num? bNB;
+  num? eTH;
+  num? uSDT;
+  num? uSDP;
+  num? uSDC;
+  num? bUSD;
 
   Free(
       {this.bTC,
@@ -441,15 +441,15 @@ class Free {
       this.bUSD});
 
   Free.fromJson(Map<String, dynamic> json) {
-    bTC = double.tryParse(json['BTC'].toString());
-    xRP = double.tryParse(json['XRP'].toString());
-    tUSD = double.tryParse(json['TUSD'].toString());
-    bNB = double.tryParse(json['BNB'].toString());
-    eTH = double.tryParse(json['ETH'].toString());
-    uSDT = double.tryParse(json['USDT'].toString());
-    uSDP = double.tryParse(json['USDP'].toString());
-    uSDC = double.tryParse(json['USDC'].toString());
-    bUSD = double.tryParse(json['BUSD'].toString());
+    bTC = num.tryParse(json['BTC'].toString());
+    xRP = num.tryParse(json['XRP'].toString());
+    tUSD = num.tryParse(json['TUSD'].toString());
+    bNB = num.tryParse(json['BNB'].toString());
+    eTH = num.tryParse(json['ETH'].toString());
+    uSDT = num.tryParse(json['USDT'].toString());
+    uSDP = num.tryParse(json['USDP'].toString());
+    uSDC = num.tryParse(json['USDC'].toString());
+    bUSD = num.tryParse(json['BUSD'].toString());
   }
 
   Map<String, dynamic> toJson() {
@@ -468,15 +468,15 @@ class Free {
 }
 
 class Used {
-  double? bTC;
-  double? xRP;
-  double? tUSD;
-  double? bNB;
-  double? eTH;
-  double? uSDT;
-  double? uSDP;
-  double? uSDC;
-  double? bUSD;
+  num? bTC;
+  num? xRP;
+  num? tUSD;
+  num? bNB;
+  num? eTH;
+  num? uSDT;
+  num? uSDP;
+  num? uSDC;
+  num? bUSD;
 
   Used(
       {this.bTC,
@@ -490,15 +490,15 @@ class Used {
       this.bUSD});
 
   Used.fromJson(Map<String, dynamic> json) {
-    bTC = double.tryParse(json['BTC'].toString());
-    xRP = double.tryParse(json['XRP'].toString());
-    tUSD = double.tryParse(json['TUSD'].toString());
-    bNB = double.tryParse(json['BNB'].toString());
-    eTH = double.tryParse(json['ETH'].toString());
-    uSDT = double.tryParse(json['USDT'].toString());
-    uSDP = double.tryParse(json['USDP'].toString());
-    uSDC = double.tryParse(json['USDC'].toString());
-    bUSD = double.tryParse(json['BUSD'].toString());
+    bTC = num.tryParse(json['BTC'].toString());
+    xRP = num.tryParse(json['XRP'].toString());
+    tUSD = num.tryParse(json['TUSD'].toString());
+    bNB = num.tryParse(json['BNB'].toString());
+    eTH = num.tryParse(json['ETH'].toString());
+    uSDT = num.tryParse(json['USDT'].toString());
+    uSDP = num.tryParse(json['USDP'].toString());
+    uSDC = num.tryParse(json['USDC'].toString());
+    bUSD = num.tryParse(json['BUSD'].toString());
   }
 
   Map<String, dynamic> toJson() {

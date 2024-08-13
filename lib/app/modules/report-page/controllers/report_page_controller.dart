@@ -1,8 +1,9 @@
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:get/get.dart';
+
 import 'package:algo_trade/app/data/models/report.models.dart';
 import 'package:algo_trade/app/network/trade_provider.dart';
 import 'package:algo_trade/utils/constants.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:get/get.dart';
 
 class ReportPageController extends GetxController {
   final TradesProvider tradesProvider = TradesProvider();
