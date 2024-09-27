@@ -20,6 +20,8 @@ import '../modules/more/bindings/more_binding.dart';
 import '../modules/more/views/more_view.dart';
 import '../modules/orders/bindings/orders_binding.dart';
 import '../modules/orders/views/orders_view.dart';
+import '../modules/price-listener/bindings/price_listener_binding.dart';
+import '../modules/price-listener/views/price_listener_view.dart';
 import '../modules/report-page/bindings/report_page_binding.dart';
 import '../modules/report-page/views/report_page_view.dart';
 import '../modules/setting/bindings/setting_binding.dart';
@@ -113,6 +115,11 @@ class AppPages {
       name: _Paths.GROUPED_PENDING_TRADES,
       page: () => const GroupedPendingTradesView(),
       binding: GroupedPendingTradesBinding(),
+    ),
+    GetPage(
+      name: _Paths.PRICE_LISTENER,
+      page: () => const PriceListenerView(),
+      binding: PriceListenerBinding(),
     ),
   ];
 }

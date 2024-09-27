@@ -1,8 +1,6 @@
-import 'package:flutter/material.dart';
-
-import 'package:get/get.dart';
-
 import 'package:algo_trade/app/routes/app_pages.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import '../controllers/more_controller.dart';
 
@@ -38,6 +36,10 @@ class MoreView extends GetView<MoreController> {
       const MoreListItem(
         title: "GP TRADES",
         route: Routes.GROUPED_PENDING_TRADES,
+      ),
+      const MoreListItem(
+        title: "PRICE LISTENER",
+        route: Routes.PRICE_LISTENER,
       ),
     ];
   }

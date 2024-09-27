@@ -1,11 +1,5 @@
 import 'dart:async';
 
-import 'package:flutter/material.dart';
-
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
-
 import 'package:algo_trade/app/data/models/binance_stream.dart';
 import 'package:algo_trade/app/data/models/dashboard_card.dart';
 import 'package:algo_trade/app/data/models/future_trade.dart';
@@ -14,6 +8,10 @@ import 'package:algo_trade/app/network/trade_provider.dart';
 import 'package:algo_trade/app/routes/app_pages.dart';
 import 'package:algo_trade/main.dart';
 import 'package:algo_trade/utils/constants.dart';
+import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 
 final wsUrl = Uri.parse('wss://stream.binance.com:9443/ws/!miniTicker@arr');
 
@@ -72,18 +70,33 @@ class HomeController extends GetxController {
     ever(priceController.tickerStreamMap, (callback) {
       tickerStreamMap.value = callback;
 
-      trades.sort((a, b) {
-        final aProfit = (a.ltp - a.buyPrice) * a.quantity;
-        final bProfit = (b.ltp - b.buyPrice) * b.quantity;
-        return bProfit.compareTo(aProfit);
-      });
+      for (var element in trades) {
+        if (tickerStreamMap.containsKey(element.symbol)) {
+          element.ltp = tickerStreamMap[element.symbol]?.price;
+        }
+      }
 
-      trades.refresh();
+      sortTradeByProfit();
+
+      // print("tickerStreamMap: $tickerStreamMap");
     });
 
     ever(search, (callback) => fetchTrades());
     ever(count, (callback) {
       if (count.value == 0) fetchData();
+    });
+  }
+
+  void sortTradeByProfit() {
+    trades.sort((a, b) {
+      if (a.ltp == null || b.ltp == null) {
+        return 0;
+      }
+
+      final aProfit = ((a.ltp ?? 0) - (a.buyPrice)) * (a.quantity);
+      final bProfit = ((b.ltp ?? 0) - (b.buyPrice)) * (b.quantity);
+
+      return bProfit.compareTo(aProfit);
     });
   }
 
@@ -105,21 +118,22 @@ class HomeController extends GetxController {
       if (market.value == "FUTURE") {
         trades.value = tradeBody
             .map((e) => FutureTrade.fromJson(e))
-            .map((e) => Trade(
-                  buyPrice: e.buyPrice ?? 0,
-                  sellPrice: e.sellPrice,
-                  symbol: e.symbol,
-                  quantity: e.quantity ?? 0,
-                  ltp: priceController.tickerStreamMap[e.symbol]?.price ??
-                      e.buyPrice,
-                ))
+            .map(
+              (e) => Trade(
+                buyPrice: e.buyPrice ?? 0,
+                quantity: e.quantity ?? 0,
+                symbol: e.symbol,
+                buyTime: e.buyTime,
+                sellPrice: e.sellPrice ?? 0,
+                sellTime: e.sellTime,
+                ltp: tickerStreamMap[e.symbol]?.price ?? 0,
+              ),
+            )
+
+            // .map((e) => Trade())
             .toList();
 
-        trades.sort((a, b) {
-          final aProfit = (a.ltp - a.buyPrice) * a.quantity;
-          final bProfit = (b.ltp - b.buyPrice) * b.quantity;
-          return bProfit.compareTo(aProfit);
-        });
+        sortTradeByProfit();
       } else {
         trades.value = tradeBody.map((e) => Trade.fromJson(e)).toList();
       }

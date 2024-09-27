@@ -1,5 +1,5 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
@@ -15,9 +15,8 @@ const kNeutralColor = Colors.grey;
 const users = {
   "gcs": "https://binance-spot-trade.spideyworld.co.in",
   "satyam": "https://satyam-algo-trade.spideyworld.co.in",
-  // "gcs": "http://13.127.1.63:9001",
-  "amit": "http://3.109.94.54:9001",
-  // "sudhanshu": "http://13.235.211.38:9001"
+  "amit": "https://amit-algo-trade.spideyworld.co.in",
+  "sudhanshu": "http://3.6.143.126:8000"
 };
 
 get loggedInUser {
@@ -28,7 +27,9 @@ get loggedInUser {
 get availableUsers => users.keys.toList();
 
 // const kApiUrl = "http://52.66.39.113:9001";
-get kApiUrl => users[loggedInUser];
+// get kApiUrl => users[loggedInUser];
+
+get kApiUrl => kDebugMode ? "http://192.168.1.13:9001" : users[loggedInUser];
 
 get kFcmTokenUrl => "$kApiUrl/fcm";
 get kTradeList => '$kApiUrl/trades';
@@ -38,6 +39,8 @@ get kTickerList => '$kApiUrl/tickers';
 get kReportProfit => '$kApiUrl/reports';
 get kReportCard => '$kApiUrl/reports/future/card';
 get kProfit => "$kTradeList/profit";
+
+get kUpdateOrder => "$kApiUrl/orders";
 
 // Grouped Trades
 get kGroupedPendingTrades => "$kTradeList/grouped/pending";

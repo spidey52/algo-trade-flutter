@@ -1,11 +1,10 @@
-import 'package:flutter/material.dart';
-
-import 'package:get/get.dart';
-
 import 'package:algo_trade/app/data/models/ticker.dart';
 import 'package:algo_trade/app/modules/completed/views/completed_view.dart';
 import 'package:algo_trade/app/routes/app_pages.dart';
 import 'package:algo_trade/utils/constants.dart';
+import 'package:algo_trade/widgets/my_chip.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import '../controllers/tickers_controller.dart';
 
@@ -78,39 +77,6 @@ class TickersView extends GetView<TickersController> {
             ],
           ),
         ));
-  }
-}
-
-class MyChip extends StatelessWidget {
-  const MyChip({
-    Key? key,
-    required this.label,
-    required this.color,
-  }) : super(key: key);
-
-  final String label;
-  final Color color;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        color: color.withOpacity(0.2),
-        borderRadius: BorderRadius.circular(4),
-      ),
-      padding: const EdgeInsets.symmetric(
-        horizontal: 8,
-        vertical: 4,
-      ),
-      child: Text(
-        label,
-        style: TextStyle(
-          fontSize: 12,
-          color: color,
-          fontWeight: FontWeight.bold,
-        ),
-      ),
-    );
   }
 }
 

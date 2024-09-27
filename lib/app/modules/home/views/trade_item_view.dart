@@ -1,13 +1,12 @@
-import 'package:flutter/material.dart';
-
-import 'package:get/get.dart';
-
 import 'package:algo_trade/app/data/models/binance_stream.dart';
 import 'package:algo_trade/app/data/models/trade.dart';
 import 'package:algo_trade/app/modules/completed/views/completed_view.dart';
 import 'package:algo_trade/app/modules/home/controllers/home_controller.dart';
 import 'package:algo_trade/app/routes/app_pages.dart';
 import 'package:algo_trade/utils/constants.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 class TradeItem extends StatelessWidget {
   const TradeItem({
@@ -21,7 +20,7 @@ class TradeItem extends StatelessWidget {
   final Trade trade;
   final BinanceStream ticker;
 
-  double get cp => trade.quantity * trade.buyPrice;
+  double get cp => (trade.quantity * trade.buyPrice).toDouble();
   double get sp => trade.quantity * ticker.price;
   double get profit => sp - cp;
   double get profitPercent => (profit / cp) * 100;
@@ -78,7 +77,14 @@ class TradeItem extends StatelessWidget {
                       KeyValue(title: "symbol", value: "${trade.symbol}"),
                       KeyValue(title: "quantity", value: "${trade.quantity}"),
                       KeyValue(title: "buyPrice", value: "${trade.buyPrice}"),
-                      KeyValue(title: "BuyTime", value: "${trade.buyTime}"),
+                      KeyValue(
+                        title: "BuyTime",
+                        value: DateFormat("dd MMM yyyy HH:mm:ss")
+                            .format(
+                              DateTime.parse(trade.buyTime ?? ""),
+                            )
+                            .toUpperCase(),
+                      )
                     ],
                   ),
                 ),

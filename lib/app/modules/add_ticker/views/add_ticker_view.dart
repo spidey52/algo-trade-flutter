@@ -1,8 +1,6 @@
-import 'package:flutter/material.dart';
-
-import 'package:get/get.dart';
-
 import 'package:algo_trade/widgets/ticker_form.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import '../controllers/add_ticker_controller.dart';
 
@@ -22,9 +20,15 @@ class AddTickerView extends GetView<AddTickerController> {
           sellPercentController: controller.sellPercentController,
           amountController: controller.amountController,
           isLoading: controller.isLoading.value,
+          strategy: controller.strategy.value,
+          onStrategyChanged: controller.onStrategyChanged,
           loopEnabled: controller.loopEnabled.value,
+          robEnabled: controller.robEnabled.value,
+          rosEnabled: controller.rosEnabled.value,
           openOrdersController: controller.openOrdersController,
           onLoopEnabledChanged: controller.onLoopEnabledChanged,
+          onRobEnabledChanged: controller.onRobEnabledChanged,
+          onRosEnabledChanged: controller.onRosEnabledChanged,
           onSave: controller.saveTicker,
         ),
       ),

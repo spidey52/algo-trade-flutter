@@ -1,0 +1,22 @@
+{
+	"flutter": {
+		"platforms": {
+			"android": {
+				"default": {
+					"projectId": "algo-trade-dcceb",
+					"appId": "1:412859863824:android:fdb2bf1b8b193770314b95",
+					"fileOutput": "android/app/google-services.json"
+				}
+			},
+			"dart": {
+				"lib/firebase_options.dart": {
+					"projectId": "algo-trade-dcceb",
+					"configurations": {
+						"android": "1:412859863824:android:fdb2bf1b8b193770314b95",
+						"web": "1:412859863824:web:6412f47202da940a314b95"
+					}
+				}
+			}
+		}
+	}
+}

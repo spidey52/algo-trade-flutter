@@ -1,10 +1,8 @@
-import 'package:flutter/material.dart';
-
-import 'package:get/get.dart';
-import 'package:intl/intl.dart';
-
 import 'package:algo_trade/app/data/models/future_trade.dart';
 import 'package:algo_trade/main.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 import '../controllers/completed_controller.dart';
 
@@ -86,7 +84,8 @@ class CompletedTradeItem extends StatelessWidget {
 
   double get profit {
     if (trade.buyPrice == null || trade.sellPrice == null) return 0;
-    return trade.quantity! * (trade.sellPrice! - trade.buyPrice!);
+
+    return ((trade.sellPrice! - trade.buyPrice!) * trade.quantity!).toDouble();
   }
 
   double get profitPercent {

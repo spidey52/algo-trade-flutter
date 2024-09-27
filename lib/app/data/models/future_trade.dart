@@ -2,13 +2,13 @@ class FutureTrade {
   String? sId;
   String? orderId;
   String? symbol;
-  double? quantity;
-  double? buyPrice;
+  num? quantity;
+  num? buyPrice;
   String? buyTime;
   String? createdAt;
   String? updatedAt;
   int? iV;
-  double? sellPrice;
+  num? sellPrice;
   String? sellTime;
   String? user;
 
@@ -33,9 +33,8 @@ class FutureTrade {
     quantity = json['quantity']?.toDouble();
     buyPrice = json['buyPrice']?.toDouble();
     buyTime = json['buyTime'];
-    // createdAt = json['createdAt'];
-    // updatedAt = json['updatedAt'];
-    iV = json['__v'];
+    createdAt = json['createdAt'];
+    updatedAt = json['updatedAt'];
     sellPrice = json['sellPrice']?.toDouble();
     sellTime = json['sellTime'];
     user = json['user'];

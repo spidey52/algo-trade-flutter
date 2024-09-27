@@ -1,12 +1,11 @@
-import 'package:flutter/material.dart';
-
-import 'package:get/get.dart';
-
 import 'package:algo_trade/app/modules/completed/views/completed_view.dart';
 import 'package:algo_trade/app/network/api_service.dart';
 import 'package:algo_trade/main.dart';
 import 'package:algo_trade/utils/constants.dart';
-import 'package:algo_trade/widgets/my_chip.dart';
+import 'package:algo_trade/widgets/order_chip.dart';
+import 'package:algo_trade/widgets/ticker_form.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import '../controllers/orders_controller.dart';
 
@@ -251,41 +250,158 @@ class BinanceOrderItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Wrap(
-          runSpacing: 10,
-          children: [
-            KeyValue(title: "Symbol", value: "${order.symbol}"),
-            KeyValue(title: "Price", value: "${order.price}"),
-            KeyValue(title: "Quantity", value: "${order.amount}"),
-            KeyValue(title: "OrderID", value: "${order.orderId}"),
-            Row(mainAxisAlignment: MainAxisAlignment.end, children: [
-              GestureDetector(
-                onTap: isCancelLoading
-                    ? null
-                    : () async {
-                        if (order.orderId != null && order.symbol != null) {
-                          await cancelOrder(
-                              [order.orderId ?? ""], order.symbol ?? "");
-                        } else {
-                          showToast("Order id not found");
-                        }
-                      },
-                child: MyChip(
-                  str: isCancelLoading ? "Cancelling" : "Cancel Order",
-                  color: Colors.grey,
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 8,
-                    vertical: 4,
+    return GestureDetector(
+      onLongPress: () {
+        Get.defaultDialog(
+          title: "Update Order",
+          content: UpdateOrder(
+            id: order.orderId ?? "",
+            price: order.price ?? 0,
+            quantity: order.amount ?? 0,
+            side: order.side ?? "",
+            symbol: order.symbol ?? "",
+            type: "limit",
+          ),
+        );
+      },
+      child: Card(
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Wrap(
+            runSpacing: 10,
+            children: [
+              KeyValue(title: "Symbol", value: "${order.symbol}"),
+              KeyValue(title: "Price", value: "${order.price}"),
+              KeyValue(title: "Quantity", value: "${order.amount}"),
+              KeyValue(title: "OrderID", value: "${order.orderId}"),
+              Row(mainAxisAlignment: MainAxisAlignment.end, children: [
+                GestureDetector(
+                  onTap: isCancelLoading
+                      ? null
+                      : () async {
+                          if (order.orderId != null && order.symbol != null) {
+                            await cancelOrder(
+                                [order.orderId ?? ""], order.symbol ?? "");
+                          } else {
+                            showToast("Order id not found");
+                          }
+                        },
+                  child: OrderChip(
+                    str: isCancelLoading ? "Cancelling" : "Cancel Order",
+                    color: Colors.grey,
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 8,
+                      vertical: 4,
+                    ),
                   ),
                 ),
-              ),
-            ])
-          ],
+              ])
+            ],
+          ),
         ),
       ),
+    );
+  }
+}
+
+class UpdateOrder extends StatefulWidget {
+  UpdateOrder({
+    super.key,
+    required this.id,
+    required this.price,
+    required this.quantity,
+    required this.side,
+    required this.symbol,
+    required this.type,
+  });
+
+  final TextEditingController priceController = TextEditingController();
+  final TextEditingController quantityController = TextEditingController();
+
+  final num price;
+  final num quantity;
+  final String id;
+  final String side;
+  final String symbol;
+  final String type;
+
+  @override
+  State<UpdateOrder> createState() => _UpdateOrderState();
+}
+
+class _UpdateOrderState extends State<UpdateOrder> {
+  @override
+  void initState() {
+    super.initState();
+
+    widget.priceController.text = widget.price.toString();
+    widget.quantityController.text = widget.quantity.toString();
+  }
+
+  Future<void> updateOrder() async {
+    final price = widget.priceController.text;
+    final quantity = widget.quantityController.text;
+
+    if (price.isEmpty || quantity.isEmpty) {
+      showToast("Price and Quantity cannot be empty");
+      return;
+    }
+
+    try {
+      final response =
+          await ApiService().post("$kUpdateOrder/${widget.id}/update", {
+        "price": price,
+        "quantity": quantity,
+        "side": widget.side,
+        "symbol": widget.symbol,
+        "type": widget.type,
+      });
+
+      if (response.statusCode == 200) {
+        showToast("Order updated");
+        Get.back();
+        return;
+      }
+
+      print(response.body);
+      handleApiError(response);
+    } catch (e) {
+      showToast(e.toString());
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        const Text("Update Order"),
+
+        // TextField(
+        //   controller: widget.priceController,
+        //   decoration: const InputDecoration(
+        //     labelText: "Price",
+        //   ),
+        // ),
+
+        TickerTextField(
+          controller: widget.priceController,
+          label: "Price",
+          keyboardType: TextInputType.number,
+        ),
+
+        TickerTextField(
+          controller: widget.quantityController,
+          label: "Quantity",
+          keyboardType: TextInputType.number,
+        ),
+
+        ElevatedButton(
+          onPressed: () async {
+            await updateOrder();
+          },
+          child: const Text("Update"),
+        )
+      ],
     );
   }
 }

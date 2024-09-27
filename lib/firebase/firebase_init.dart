@@ -1,7 +1,7 @@
+import 'package:algo_trade/utils/constants.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-
-import 'package:algo_trade/utils/constants.dart';
+import 'package:get/get.dart';
 
 Future<void> backgroundHandler(RemoteMessage message) async {
   print(message.data.toString());
@@ -71,9 +71,16 @@ class FirebaseApi {
 
   Future<void> initNotifcations() async {
     await _firebaseMessaging.requestPermission();
-    final fcmToken = await _firebaseMessaging.getToken();
+    final isWeb = GetPlatform.isWeb;
+    final fcmToken = isWeb
+        ? await _firebaseMessaging.getToken(
+            vapidKey:
+                "BFDwwUlcHQbCQqSYFPn_MxvmffDyg8Wv0OoD91oRXm4rx5jk8wp2uM6o39QfdYc3G4CCd5g5uWJbzqgUOMvkAb4")
+        : await _firebaseMessaging.getToken();
 
     firebaseToken = fcmToken ?? '';
+
+    print('Firebase Token: $firebaseToken');
 
     initPushNotifications();
     initLocalNotifcations();

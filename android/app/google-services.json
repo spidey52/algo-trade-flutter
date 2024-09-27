@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "412859863824",
+    "project_id": "algo-trade-dcceb",
+    "storage_bucket": "algo-trade-dcceb.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:412859863824:android:fdb2bf1b8b193770314b95",
+        "android_client_info": {
+          "package_name": "com.spideyworld.algo_trade"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "412859863824-2oopt5kjs2qforpeg4s6ifkddu387kcm.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCQY0vsVXbNV-9UMq0Fm_CRfkV3rkzi2mk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "412859863824-2oopt5kjs2qforpeg4s6ifkddu387kcm.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

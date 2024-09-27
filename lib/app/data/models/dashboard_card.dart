@@ -33,7 +33,7 @@ class DashboardCard {
 
 class CardResult {
   String? title;
-  double? profit;
+  num? profit;
 
   CardResult({this.title, this.profit});
 

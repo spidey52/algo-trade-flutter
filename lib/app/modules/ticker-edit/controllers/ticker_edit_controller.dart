@@ -1,10 +1,8 @@
-import 'package:flutter/material.dart';
-
-import 'package:get/get.dart';
-
 import 'package:algo_trade/app/data/models/ticker.dart';
 import 'package:algo_trade/app/network/trade_provider.dart';
 import 'package:algo_trade/utils/constants.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class TickerEditController extends GetxController {
   late BinanceTicker _binanceTicker;
@@ -17,12 +15,28 @@ class TickerEditController extends GetxController {
   TextEditingController amountController = TextEditingController();
   TextEditingController openOrdersController = TextEditingController();
 
+  RxString strategy = "AUTO_ORDER".obs; // "GRID_ORDER".obs;
+
   RxBool loopEnabled = false.obs;
+  RxBool robEnabled = false.obs;
+  RxBool rosEnabled = false.obs;
 
   RxBool isLoading = false.obs;
 
   onLoopEnabledChanged(bool value) {
     loopEnabled.value = value;
+  }
+
+  onRobEnabledChanged(bool value) {
+    robEnabled.value = value;
+  }
+
+  onRosEnabledChanged(bool value) {
+    rosEnabled.value = value;
+  }
+
+  onStrategyChanged(String value) {
+    strategy.value = value;
   }
 
   Future<void> saveTicker() async {
@@ -38,6 +52,9 @@ class TickerEditController extends GetxController {
           "amount": amountController.text,
           "loopEnabled": loopEnabled.value,
           "oomp": loopEnabled.value,
+          "rob": robEnabled.value,
+          "ros": rosEnabled.value,
+          "strategy": strategy.value,
           "maxPendingOrders": openOrdersController.text,
         },
       );
@@ -59,13 +76,17 @@ class TickerEditController extends GetxController {
   void onInit() {
     if (Get.arguments != null) {
       _binanceTicker = Get.arguments as BinanceTicker;
-
       symbolController.text = _binanceTicker.symbol ?? "";
       buyPercentController.text = _binanceTicker.buyPercent.toString();
       sellPercentController.text = _binanceTicker.sellPercent.toString();
       amountController.text = _binanceTicker.amount.toString();
       openOrdersController.text = _binanceTicker.maxPendingOrders.toString();
       loopEnabled.value = _binanceTicker.oomp ?? false;
+
+      strategy.value = _binanceTicker.strategy ?? "AUTO_TRADE";
+
+      robEnabled.value = _binanceTicker.rob ?? false;
+      rosEnabled.value = _binanceTicker.ros ?? false;
     }
 
     super.onInit();

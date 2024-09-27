@@ -1,6 +1,6 @@
 class ReportResponse {
-  double? totalProfit;
-  double? totalInvested;
+  num? totalProfit;
+  num? totalInvested;
   int? totalTrades;
   List<ReportSymbol>? symbols;
   String? date;
@@ -44,9 +44,9 @@ class ReportResponse {
 
 class ReportSymbol {
   String? symbol;
-  double? profit;
+  num? profit;
   int? count;
-  double? invested;
+  num? invested;
 
   ReportSymbol({this.symbol, this.profit, this.count, this.invested});
 

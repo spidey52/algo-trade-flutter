@@ -2,32 +2,30 @@ import 'package:flutter/material.dart';
 
 class MyChip extends StatelessWidget {
   const MyChip({
-    super.key,
-    required this.str,
-    this.color = Colors.orange,
-    this.padding = const EdgeInsets.all(10),
-    this.radius = 4,
-  });
+    Key? key,
+    required this.label,
+    required this.color,
+  }) : super(key: key);
 
-  final String str;
+  final String label;
   final Color color;
-  // final double padding;
-  final double radius;
-  final EdgeInsets padding;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: padding,
       decoration: BoxDecoration(
-        color: color,
-        borderRadius: BorderRadius.circular(radius),
+        color: color.withOpacity(0.2),
+        borderRadius: BorderRadius.circular(4),
+      ),
+      padding: const EdgeInsets.symmetric(
+        horizontal: 8,
+        vertical: 4,
       ),
       child: Text(
-        str,
-        style: const TextStyle(
+        label,
+        style: TextStyle(
           fontSize: 12,
-          color: Colors.white,
+          color: color,
           fontWeight: FontWeight.bold,
         ),
       ),

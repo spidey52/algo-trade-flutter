@@ -1,18 +1,17 @@
 import 'dart:convert';
 
-import 'package:flutter/material.dart';
-
-import 'package:firebase_core/firebase_core.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
-import 'package:web_socket_channel/web_socket_channel.dart';
-
 import 'package:algo_trade/app/data/models/binance_stream.dart';
 import 'package:algo_trade/app/data/models/ticker.dart';
 import 'package:algo_trade/app/network/trade_provider.dart';
 import 'package:algo_trade/firebase/firebase_init.dart';
 import 'package:algo_trade/utils/constants.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
+import 'package:web_socket_channel/web_socket_channel.dart';
 
 import 'app/routes/app_pages.dart';
 
@@ -21,7 +20,8 @@ final wsUrl = Uri.parse('wss://glm1.spideyworld.co.in/crypto-stream');
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  if (GetPlatform.isAndroid) {
+
+  if (GetPlatform.isAndroid && !kIsWeb) {
     // await AndroidAlarmManager.initialize();
     await Firebase.initializeApp();
     await FirebaseApi().initNotifcations();
@@ -99,6 +99,7 @@ class PriceController extends GetxController {
       if (tickers.isEmpty) {
         await fetchTickers();
       }
+
       channel = WebSocketChannel.connect(wsUrl);
       Fluttertoast.showToast(msg: "Socket connected");
 

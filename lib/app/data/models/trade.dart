@@ -2,31 +2,30 @@ class Trade {
   String? sId;
   String? user;
   String? symbol;
-  double buyPrice = 0;
-  double quantity = 0;
+  num buyPrice = 0;
+  num quantity = 0;
   bool? reorder;
-  int? buyTime;
-  // String? createdAt;
-  // String? updatedAt;
-  int? iV;
-  double? sellPrice;
-  int? sellTime;
-  dynamic ltp;
+  String? buyTime;
+  String? createdAt;
+  String? updatedAt;
+  num sellPrice = 0.0;
+  String? sellTime;
+  num? ltp;
 
-  Trade(
-      {this.sId,
-      this.user,
-      this.symbol,
-      this.buyPrice = 0,
-      this.quantity = 0,
-      this.reorder,
-      this.buyTime,
-      // this.createdAt,
-      // this.updatedAt,
-      this.iV,
-      this.sellPrice,
-      this.ltp,
-      this.sellTime});
+  Trade({
+    this.sId,
+    this.user,
+    this.symbol,
+    this.buyPrice = 0,
+    this.quantity = 0,
+    this.reorder,
+    this.buyTime,
+    // this.createdAt,
+    // this.updatedAt,
+    this.sellPrice = 0.0,
+    this.ltp,
+    this.sellTime,
+  });
 
   Trade.fromJson(Map<String, dynamic> json) {
     sId = json['_id'];
@@ -36,10 +35,9 @@ class Trade {
     quantity = json['quantity']?.toDouble() ?? 0;
     reorder = json['reorder'];
     buyTime = json['buyTime'];
-    // createdAt = json['createdAt'];
-    // updatedAt = json['updatedAt'];
-    iV = json['__v'];
-    sellPrice = json['sellPrice']?.toDouble();
+    createdAt = json['createdAt'];
+    updatedAt = json['updatedAt'];
+    sellPrice = json['sellPrice']?.toDouble() ?? 0.0;
     sellTime = json['sellTime'];
     ltp = json['ltp'];
   }
@@ -55,8 +53,7 @@ class Trade {
     data['buyTime'] = buyTime;
     // data['createdAt'] = createdAt;
     // data['updatedAt'] = updatedAt;
-    data['__v'] = iV;
-    data['sellPrice'] = sellPrice ?? 0.0;
+    data['sellPrice'] = sellPrice;
     data['sellTime'] = sellTime ?? 0;
     return data;
   }
